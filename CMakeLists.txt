@@ -87,6 +87,8 @@ add_library(${PROJECT_NAME} SHARED
         src/Logger.cpp
         src/ConfigSingleton.cpp
         src/Config.cpp
+        src/FPSSingleton.cpp
+        src/Wrappers/FPSWrapper.cpp
 )
 
 # Define an option for logging to a file
