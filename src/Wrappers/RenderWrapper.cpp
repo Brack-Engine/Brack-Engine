@@ -1,4 +1,3 @@
-#include <SDL_image.h>
 #include "RenderWrapper.hpp"
 #include "../includes/SystemManager.hpp"
 #include "../ConfigSingleton.hpp"
@@ -16,13 +15,6 @@ RenderWrapper::~RenderWrapper() {
 bool RenderWrapper::Initialize() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "SDL2 initialization failed: " << SDL_GetError() << std::endl;
-        return false;
-    }
-
-    // Initialize SDL_image
-    if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
-        std::cerr << "SDL_image initialization failed: " << IMG_GetError() << std::endl;
-        SDL_Quit();
         return false;
     }
 
