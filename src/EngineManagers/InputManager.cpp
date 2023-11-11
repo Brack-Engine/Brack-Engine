@@ -4,13 +4,13 @@
 
 #include <Helpers/KeyMap.hpp>
 #include <Helpers/MouseMap.hpp>
-#include "InputManager.hpp"
+#include "EngineManagers/InputManager.hpp"
 #include "../Logger.hpp"
 
 InputManager InputManager::instance;
 
 void InputManager::SetKeyPressed(const int key) {
-    if(keyInputs.find(key)->second == None || keyInputs.find(key)->second == Released){
+    if (keyInputs.find(key)->second == None || keyInputs.find(key)->second == Released) {
         keyInputs.find(key)->second = Clicked;
     }
 }
@@ -65,30 +65,30 @@ InputManager &InputManager::GetInstance() {
 }
 
 InputManager::InputManager() {
-    mousePosition = std::make_unique<Vector2>(0,0);
-    mouseInputs.emplace(LEFT_MOUSE,None);
-    mouseInputs.emplace(MIDDLE_MOUSE,None);
-    mouseInputs.emplace(RIGHT_MOUSE,None);
+    mousePosition = std::make_unique<Vector2>(0, 0);
+    mouseInputs.emplace(LEFT_MOUSE, None);
+    mouseInputs.emplace(MIDDLE_MOUSE, None);
+    mouseInputs.emplace(RIGHT_MOUSE, None);
 
-    for (KeyMap key : {KeyMap_List})
-    {
+    for (KeyMap key: {KeyMap_List}) {
         keyInputs.emplace(key, None);
     }
 }
 
 void InputManager::UpdateEvents() {
-    for (auto& item : keyInputs) {
-        if(item.second == Clicked){
+
+    for (auto &item: keyInputs) {
+        if (item.second == Clicked) {
             item.second = Pressed;
-        }else if(item.second == Released){
+        } else if (item.second == Released) {
             item.second = None;
         }
     }
 
-    for (auto& item : mouseInputs) {
-        if(item.second == Clicked){
+    for (auto &item: mouseInputs) {
+        if (item.second == Clicked) {
             item.second = Pressed;
-        }else if(item.second == Released){
+        } else if (item.second == Released) {
             item.second = None;
         }
     }

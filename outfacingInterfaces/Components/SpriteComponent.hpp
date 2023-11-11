@@ -25,7 +25,6 @@ struct SpriteComponent : public TransformComponent {
     std::unique_ptr<Color> color;
     bool flipX, flipY;
     int sortingLayer, orderInLayer;
-    int margin;
 };
 
 #endif //BRACK_ENGINE_SPRITECOMPONENT_HPP

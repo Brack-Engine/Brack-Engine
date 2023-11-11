@@ -70,26 +70,7 @@ void RenderWrapper::RenderCamera(CameraComponent *camera) {
 }
 
 void RenderWrapper::RenderSprite(SpriteComponent &sprite) {
-    auto texture = textures.find(sprite.spritePath);
-    if(texture == textures.end()) {
-        SDL_Surface* surface = SDL_LoadBMP(sprite.spritePath.c_str());
-        std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> bmpTexture(SDL_CreateTextureFromSurface(renderer.get(), surface), &SDL_DestroyTexture);
-        textures.insert(std::make_pair(sprite.spritePath,std::move(bmpTexture)));
-        SDL_FreeSurface(surface);
-    }
-    texture = textures.find(sprite.spritePath);
 
-    SDL_Rect spriteRectangle;
-    int spriteWidth = sprite.spriteSize->getX();
-    int spriteHeight = sprite.spriteSize->getY();
-    spriteRectangle.x = (sprite.tileOffset->getX() * spriteWidth) + (sprite.margin * sprite.tileOffset->getX());
-    spriteRectangle.y = (sprite.tileOffset->getY() * spriteHeight) + (sprite.margin * sprite.tileOffset->getY());
-    spriteRectangle.w = spriteWidth;
-    spriteRectangle.h = spriteHeight;
-
-    SDL_Rect srcRect = spriteRectangle;
-    SDL_Rect destRect = {static_cast<int>(sprite.position->getX()), static_cast<int>(sprite.position->getY()), static_cast<int>(sprite.spriteSize->getX() * sprite.scale->getX()), static_cast<int>(sprite.spriteSize->getY() * sprite.scale->getY())};
-    SDL_RenderCopy(renderer.get(), texture->second.get(), &srcRect, &destRect);
 }
 
 void RenderWrapper::RenderText(TextComponent* textComponent, TransformComponent* transformComponent) {

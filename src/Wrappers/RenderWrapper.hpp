@@ -36,7 +36,7 @@ public:
 private:
     bool Initialize();
     std::unordered_map<std::string, std::map<int, TTF_Font*>> fontCache;
-    std::map<std::string, std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>> textures;
+    std::map<std::string, SDL_Texture *> textures;
     std::unique_ptr<SDL_Renderer, void (*)(SDL_Renderer *)> renderer;
 };
 

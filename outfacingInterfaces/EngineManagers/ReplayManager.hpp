@@ -7,7 +7,7 @@
 
 #include <string>
 #include <memory>
-#include "../includes/EntityManager.hpp"
+#include "../../src/includes/EntityManager.hpp"
 
 class ReplayManager {
 public:

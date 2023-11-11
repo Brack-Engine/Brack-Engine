@@ -10,9 +10,9 @@
 #include <chrono>
 #include "../src/includes/EntityManager.hpp"
 #include "../src/includes/SystemManager.hpp"
-#include "../src/EngineManagers/SceneManager.hpp"
-#include "../src/EngineManagers/ReplayManager.hpp"
-#include "../src/EngineManagers/InputManager.hpp"
+#include "EngineManagers/SceneManager.hpp"
+#include "EngineManagers/ReplayManager.hpp"
+#include "EngineManagers/InputManager.hpp"
 #include "Config.hpp"
 #include "../src/includes/ComponentStore.hpp"
 
@@ -23,14 +23,22 @@ public:
     ~BrackEngine() = default;
 
     void Run();
-    SceneManager& GetSceneManager() const;
-    InputManager& GetInputManager() const;
-    ReplayManager& GetReplayManager() const;
-    EntityManager& GetEntityManager() const;
-    SystemManager& GetSystemManager() const;
-    ComponentStore& GetComponentStore() const;
+
+    SceneManager &GetSceneManager() const;
+
+    InputManager &GetInputManager() const;
+
+    ReplayManager &GetReplayManager() const;
+
+    EntityManager &GetEntityManager() const;
+
+    SystemManager &GetSystemManager() const;
+
+    ComponentStore &GetComponentStore() const;
+
 private:
     float GetDeltaTime();
+
     std::chrono::time_point<std::chrono::high_resolution_clock> lastTime;
 };
 

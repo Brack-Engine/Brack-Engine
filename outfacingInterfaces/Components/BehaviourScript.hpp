@@ -10,13 +10,13 @@
 #include <functional>
 
 struct BehaviourScript : public IComponent {
-
     explicit BehaviourScript() : IComponent() {}
 
     ~BehaviourScript() override = default;
 
     void Accept(ComponentVisitor &visitor) override {
         visitor.visit<BehaviourScript>(this);
+        OnStart();
     }
 
     virtual void OnStart() = 0;
