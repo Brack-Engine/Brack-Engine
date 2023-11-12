@@ -64,11 +64,3 @@ Vector2 Vector2::operator*(const float &other) const {
 Vector2 Vector2::operator/(const float &other) const {
     return Vector2(x / other, y / other);
 }
-
-bool Vector2::operator==(const Vector2 &other) const {
-    return x == other.x && y == other.y;
-}
-
-bool Vector2::operator!=(const Vector2 &other) const {
-    return x != other.x || y != other.y;
-}

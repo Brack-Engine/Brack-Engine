@@ -9,7 +9,7 @@
 #include <memory>
 #include "Helpers/Vector2.hpp"
 #include "Helpers/InputState.hpp"
-#include "../../src/includes/EntityManager.hpp"
+#include "../includes/EntityManager.hpp"
 
 class InputManager {
 public:
@@ -48,7 +48,6 @@ public:
     void SetMousePosition(const Vector2 &position);
 
     Vector2 &GetMousePosition() const;
-
     void UpdateEvents();
 
 private:

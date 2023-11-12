@@ -3,7 +3,7 @@
 //
 
 #include "InputSystem.hpp"
-#include "EngineManagers/InputManager.hpp"
+#include "../EngineManagers/InputManager.hpp"
 
 InputSystem::InputSystem() {
     inputWrapper = std::make_unique<InputWrapper>();
