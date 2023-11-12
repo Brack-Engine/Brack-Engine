@@ -9,13 +9,13 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 if (WIN32 OR WIN64)
     set(SDL2_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL")
     set(SDL2_TTF_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL")
+    set(SDL2_IMAGE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL")
 
-    include_directories(${SDL2_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR})
+    include_directories(${SDL2_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_IMAGE_DIR})
 
     find_package(SDL2 REQUIRED)
     find_package(SDL2_ttf REQUIRED)
-
-
+    find_package(SDL2_image REQUIRED)
 else ()
     find_package(PkgConfig REQUIRED)
     find_package(SDL2_ttf REQUIRED)
@@ -138,6 +138,7 @@ set(LIBRARY_FILES ${CMAKE_CURRENT_SOURCE_DIR}/lib/dll)
 
 if (WIN32 OR WIN64)
     target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_IMAGE_LIBRARY})
 
 
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
