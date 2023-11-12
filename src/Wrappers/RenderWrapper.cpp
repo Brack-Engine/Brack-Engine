@@ -1,3 +1,4 @@
+#include <SDL_image.h>
 #include "RenderWrapper.hpp"
 #include "../includes/SystemManager.hpp"
 #include "../ConfigSingleton.hpp"
@@ -20,6 +21,11 @@ bool RenderWrapper::Initialize() {
 
     if (TTF_Init() == -1) {
         std::cerr << "SDL_ttf initialization failed: " << TTF_GetError() << std::endl;
+    }
+
+    if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
+        std::cerr << "SDL2_image initialization failed: " << IMG_GetError() << std::endl;
+        SDL_Quit();
     }
 
     // Create a window.
@@ -58,6 +64,7 @@ void RenderWrapper::Cleanup() {
     Logger::GetInstance().Shutdown();
     SDL_Quit();
     TTF_Quit();
+    IMG_Quit();
 }
 
 void RenderWrapper::RenderCamera(CameraComponent *camera) {
@@ -70,25 +77,23 @@ void RenderWrapper::RenderCamera(CameraComponent *camera) {
 }
 
 void RenderWrapper::RenderSprite(SpriteComponent &sprite) {
+    //Check if the texture is already created. If not add it to the created textures
+    if(textures.find(sprite.spritePath) == textures.end())
+        textures.insert(std::make_pair(sprite.spritePath, getTexture(sprite.spritePath)));
     auto texture = textures.find(sprite.spritePath);
-    if(texture == textures.end()) {
-        SDL_Surface* surface = SDL_LoadBMP(sprite.spritePath.c_str());
-        std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> bmpTexture(SDL_CreateTextureFromSurface(renderer.get(), surface), &SDL_DestroyTexture);
-        textures.insert(std::make_pair(sprite.spritePath,std::move(bmpTexture)));
-        SDL_FreeSurface(surface);
-    }
-    texture = textures.find(sprite.spritePath);
 
-    SDL_Rect spriteRectangle;
+    //Fill in a rectangle for the current sprite IN
+    SDL_Rect srcRect;
     int spriteWidth = sprite.spriteSize->getX();
     int spriteHeight = sprite.spriteSize->getY();
-    spriteRectangle.x = (sprite.tileOffset->getX() * spriteWidth) + (sprite.margin * sprite.tileOffset->getX());
-    spriteRectangle.y = (sprite.tileOffset->getY() * spriteHeight) + (sprite.margin * sprite.tileOffset->getY());
-    spriteRectangle.w = spriteWidth;
-    spriteRectangle.h = spriteHeight;
+    srcRect.x = (sprite.tileOffset->getX() * spriteWidth) + (sprite.margin * sprite.tileOffset->getX());
+    srcRect.y = (sprite.tileOffset->getY() * spriteHeight) + (sprite.margin * sprite.tileOffset->getY());
+    srcRect.w = spriteWidth;
+    srcRect.h = spriteHeight;
 
-    SDL_Rect srcRect = spriteRectangle;
+    //Create a rectangle were the sprite needs to be rendered on to
     SDL_Rect destRect = {static_cast<int>(sprite.position->getX()), static_cast<int>(sprite.position->getY()), static_cast<int>(sprite.spriteSize->getX() * sprite.scale->getX()), static_cast<int>(sprite.spriteSize->getY() * sprite.scale->getY())};
+
     SDL_RenderCopy(renderer.get(), texture->second.get(), &srcRect, &destRect);
 }
 
@@ -140,4 +145,38 @@ void RenderWrapper::RenderButton(TextComponent &button) {
 
 void RenderWrapper::RenderFrame() {
     SDL_RenderPresent(renderer.get());
+}
+
+std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> RenderWrapper::getTexture(std::string filePath) {
+    // Get the file extension
+    size_t dotPos = filePath.find_last_of('.');
+    if (dotPos == std::string::npos) {
+        std::cerr << "Error: Invalid file path (no file extension)" << std::endl;
+        return std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>(nullptr, &SDL_DestroyTexture);
+    }
+
+    std::string extension = filePath.substr(dotPos + 1);
+
+    if (extension == "bmp") {
+        SDL_Surface* surface = SDL_LoadBMP(filePath.c_str());
+        if (surface) {
+            std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> bmpTexture(SDL_CreateTextureFromSurface(renderer.get(), surface), &SDL_DestroyTexture);
+            SDL_FreeSurface(surface);
+            return std::move(bmpTexture);
+        } else {
+            std::cerr << "Error: Failed to load BMP file: " << SDL_GetError() << std::endl;
+        }
+    } else if (extension == "png") {
+        SDL_Texture* pngTexture = IMG_LoadTexture(renderer.get(), filePath.c_str());
+        std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> texture(pngTexture, &SDL_DestroyTexture);
+        if (pngTexture) {
+            return std::move(texture);
+        } else {
+            std::cerr << "Error: Failed to load PNG file: " << IMG_GetError() << std::endl;
+        }
+    } else {
+        std::cerr << "Error: Unsupported file type: " << extension << std::endl;
+    }
+
+    return std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>(nullptr, &SDL_DestroyTexture);
 }
