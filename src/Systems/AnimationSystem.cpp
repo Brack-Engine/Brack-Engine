@@ -14,7 +14,7 @@ AnimationSystem::~AnimationSystem() {
 
 }
 
-void AnimationSystem::update(float deltaTime) {
+void AnimationSystem::update(milliseconds deltaTime) {
     auto animationComponentIds = ComponentStore::GetInstance().getEntitiesWithComponent<AnimationComponent>();
 
 
