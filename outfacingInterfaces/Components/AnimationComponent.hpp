@@ -10,7 +10,8 @@
 
 struct AnimationComponent : public IComponent {
 
-    explicit AnimationComponent() : IComponent() {}
+    explicit AnimationComponent() : IComponent() {
+    }
 
     ~AnimationComponent() override {
         if (startPosition != nullptr)
@@ -27,17 +28,19 @@ struct AnimationComponent : public IComponent {
 
     AnimationComponent(const AnimationComponent &other) : IComponent(other) {
         isLooping = other.isLooping;
-        animationSpeed = other.animationSpeed;
+        fps = other.fps;
         frameCount = other.frameCount;
         currentFrame = other.currentFrame;
+        elapsedTime = other.elapsedTime;
         if (other.startPosition != nullptr)
             startPosition = std::make_unique<Vector2>(*other.startPosition);
     }
 
-    bool isLooping;
-    float animationSpeed;
-    int frameCount, currentFrame;
-    std::unique_ptr<Vector2> startPosition;
+    bool isLooping = true, isPlaying = true;
+    float fps = 0.0f;
+    float elapsedTime = 0.0f;
+    int frameCount = 0, currentFrame = 0;
+    std::unique_ptr<Vector2> startPosition = std::make_unique<Vector2>(0, 0);
 };
 
 #endif //BRACK_ENGINE_ANIMATIONCOMPONENT_HPP
