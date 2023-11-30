@@ -34,7 +34,7 @@ public:
 
         if (!dependencyExists) {
             outgoingEdges.push_back(dependency);
-            Logger::Info("Dependency added for " + this->getName() + ", " + this->getName() + " now depends on " +
+            Logger::info("Dependency added for " + this->getName() + ", " + this->getName() + " now depends on " +
                          dependency->getName());
 
             bool backLinkExists = std::any_of(dependency->incomingEdges.begin(), dependency->incomingEdges.end(),
@@ -77,7 +77,7 @@ public:
             }
         }
 
-        Logger::Info("Dependency removed for " + dependency->getName());
+        Logger::info("Dependency removed for " + dependency->getName());
     }
 
 
@@ -87,7 +87,7 @@ public:
         // Lock the weak pointer to get a shared pointer for comparison
         auto dependency = weakDependency.lock();
         if (!dependency) {
-            Logger::Error("Dependency is expired or invalid.");
+            Logger::error("Dependency is expired or invalid.");
             return;
         }
 
@@ -99,7 +99,7 @@ public:
 
         if (!dependencyExists) {
             outgoingEdges.push_back(weakDependency);
-            Logger::Info("Dependency added for " + this->getName() + ", " + this->getName() + " now depends on " +
+            Logger::info("Dependency added for " + this->getName() + ", " + this->getName() + " now depends on " +
                          dependency->getName());
 
             bool backLinkExists = std::any_of(dependency->incomingEdges.begin(), dependency->incomingEdges.end(),

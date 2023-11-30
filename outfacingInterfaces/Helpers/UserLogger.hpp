@@ -24,34 +24,49 @@
 
 class UserLogger {
 public:
-    static void Error(const std::string &message);
-    static void Warning(const std::string &message);
-    static void Info(const std::string &message);
-    static void Debug(const std::string &message);
+    static void error(const std::string &message);
 
-    void Initialize();
-    void Shutdown();
+    static void warning(const std::string &message);
+
+    static void info(const std::string &message);
+
+    static void debug(const std::string &message);
+
+    void initialize();
+
+    void shutdown();
+
     void SetLogLevel(int level);
 
-    UserLogger(const UserLogger&) = delete;
-    UserLogger& operator=(const UserLogger&) = delete;
-    static UserLogger& GetInstance();
+    UserLogger(const UserLogger &) = delete;
+
+    UserLogger &operator=(const UserLogger &) = delete;
+
+    static UserLogger &GetInstance();
 
 private:
     UserLogger();
+
     ~UserLogger();
 
-    void LogError(const std::string &message);
-    void LogWarning(const std::string &message);
-    void LogInfo(const std::string &message);
-    void LogDebug(const std::string &message);
-    void Log(const std::string &level, const std::string &message);
-    void ProcessLogQueue();
+    void logError(const std::string &message);
+
+    void logWarning(const std::string &message);
+
+    void logInfo(const std::string &message);
+
+    void logDebug(const std::string &message);
+
+    void log(const std::string &level, const std::string &message);
+
+    void processLogQueue();
 
 #ifdef USER_LOG_TO_FILE
     std::ofstream logFile;
     std::mutex fileMutex;
-    void OpenLogFile(const std::string& filename);
+
+    void openLogFile(const std::string &filename);
+
 #endif
 
     std::vector<std::string> log_queue_;
@@ -60,9 +75,9 @@ private:
     std::thread logging_thread_;
     bool shutdown_ = false;
 
-    void CreateDirectories(const std::string &dir);
+    void createDirectories(const std::string &dir);
 
-    void CheckAndCleanOldLogs();
+    void checkAndCleanOldLogs();
 };
 
 #endif // BRACKOCALYPSE_USER_LOGGER_HPP

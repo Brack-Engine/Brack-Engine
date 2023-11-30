@@ -26,42 +26,51 @@
 class Logger {
 public:
     // Public interface for logging
-    static void Error(const std::string &message);
-    static void Warning(const std::string &message);
-    static void Info(const std::string &message);
-    static void Debug(const std::string &message);
+    static void error(const std::string &message);
+
+    static void warning(const std::string &message);
+
+    static void info(const std::string &message);
+
+    static void debug(const std::string &message);
 
     void CheckAndCleanOldLogs();
 
-    void Initialize();
+    void initialize();
 
-    void Shutdown();
+    void shutdown();
 
     // Deleted copy constructor and assignment operator for singleton
-    Logger(const Logger&) = delete;
-    Logger& operator=(const Logger&) = delete;
+    Logger(const Logger &) = delete;
+
+    Logger &operator=(const Logger &) = delete;
 
 // Static method to get the singleton instance
-static Logger& GetInstance();
+    static Logger &GetInstance();
 
 private:
     // Private constructor and destructor
     Logger();
+
     ~Logger();
 
     // Instance methods to perform the actual logging
-    void LogError(const std::string &message);
-    void LogWarning(const std::string &message);
-    void LogInfo(const std::string &message);
-    void LogDebug(const std::string &message);
-    void Log(const std::string &level, const std::string &message);
+    void logError(const std::string &message);
 
-    void ProcessLogQueue();
+    void logWarning(const std::string &message);
+
+    void logInfo(const std::string &message);
+
+    void logDebug(const std::string &message);
+
+    void log(const std::string &level, const std::string &message);
+
+    void processLogQueue();
 
 #ifdef LOG_TO_FILE
     std::ofstream logFile;
     std::mutex fileMutex;
-    void OpenLogFile(const std::string& filename);
+    void openLogFile(const std::string& filename);
 #endif
 
     std::vector<std::string> log_queue_;
@@ -72,4 +81,5 @@ private:
 
     void CreateDirectories(const std::string &dir);
 };
+
 #endif // BRACKOCALYPSE_LOGGER_HPP

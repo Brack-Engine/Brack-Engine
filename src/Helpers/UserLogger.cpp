@@ -39,21 +39,21 @@ UserLogger::UserLogger() {
     std::string fileName = "logging/game/" + timeStream.str() + "_game.log";
 
     // Create directories if they don't exist
-    CreateDirectories("logging/game");
+    createDirectories("logging/game");
 
-    OpenLogFile(fileName);
-    Initialize();
+    openLogFile(fileName);
+    initialize();
 #endif
 }
 
-void UserLogger::CheckAndCleanOldLogs() {
+void UserLogger::checkAndCleanOldLogs() {
     const std::string logDir = "logging/game/";
     const size_t maxLogFiles = 10;
 
     std::vector<std::filesystem::directory_entry> logFiles;
 
     // Gather list of log files
-    for (const auto& entry : std::filesystem::directory_iterator(logDir)) {
+    for (const auto &entry: std::filesystem::directory_iterator(logDir)) {
         if (entry.is_regular_file()) {
             logFiles.push_back(entry);
         }
@@ -61,7 +61,7 @@ void UserLogger::CheckAndCleanOldLogs() {
 
     // Sort files by last write time in descending order (newest first)
     std::sort(logFiles.begin(), logFiles.end(),
-              [](const std::filesystem::directory_entry& a, const std::filesystem::directory_entry& b) {
+              [](const std::filesystem::directory_entry &a, const std::filesystem::directory_entry &b) {
                   return std::filesystem::last_write_time(a) > std::filesystem::last_write_time(b);
               });
 
@@ -75,7 +75,7 @@ void UserLogger::CheckAndCleanOldLogs() {
 }
 
 
-void UserLogger::CreateDirectories(const std::string& dir) {
+void UserLogger::createDirectories(const std::string &dir) {
 #if defined(_WIN32)
     std::string command = "mkdir " + dir;
     system(command.c_str());
@@ -100,7 +100,7 @@ UserLogger::~UserLogger() {
         logFile.close();
     }
 
-    Shutdown();
+    shutdown();
 #endif
 }
 
@@ -111,10 +111,10 @@ UserLogger &UserLogger::GetInstance() {
 
 #ifdef USER_LOG_TO_FILE
 
-void UserLogger::OpenLogFile(const std::string &filename) {
+void UserLogger::openLogFile(const std::string &filename) {
     std::lock_guard<std::mutex> lock(fileMutex);
     if (!logFile.is_open()) {
-        CheckAndCleanOldLogs();
+        checkAndCleanOldLogs();
         logFile.open(filename, std::ios::out | std::ios::app);
         if (!logFile.is_open()) {
             throw std::runtime_error("Unable to open log file: " + filename);
@@ -125,48 +125,48 @@ void UserLogger::OpenLogFile(const std::string &filename) {
 #endif
 
 // Static methods to check log level and log if appropriate
-void UserLogger::Error(const std::string &message) {
-#if USER_CURRENT_LOG_LEVEL >=  USER_LOG_LEVEL_ERROR
-    GetInstance().LogError(message);
+void UserLogger::error(const std::string &message) {
+#if USER_CURRENT_LOG_LEVEL >= USER_LOG_LEVEL_ERROR
+    GetInstance().logError(message);
     throw std::runtime_error(message);
 #endif
 }
 
-void UserLogger::Warning(const std::string &message) {
+void UserLogger::warning(const std::string &message) {
 #if USER_CURRENT_LOG_LEVEL >= USER_LOG_LEVEL_WARNING
-    GetInstance().LogWarning(message);
+    GetInstance().logWarning(message);
 #endif
 }
 
-void UserLogger::Info(const std::string &message) {
+void UserLogger::info(const std::string &message) {
 #if USER_CURRENT_LOG_LEVEL >= USER_LOG_LEVEL_INFO
-    GetInstance().LogInfo(message);
+    GetInstance().logInfo(message);
 #endif
 }
 
-void UserLogger::Debug(const std::string &message) {
+void UserLogger::debug(const std::string &message) {
 #if USER_CURRENT_LOG_LEVEL >= USER_LOG_LEVEL_DEBUG
-    GetInstance().LogDebug(message);
+    GetInstance().logDebug(message);
 #endif
 }
 
-void UserLogger::LogError(const std::string &message) {
-    Log("ERROR", message);
+void UserLogger::logError(const std::string &message) {
+    log("ERROR", message);
 }
 
-void UserLogger::LogWarning(const std::string &message) {
-    Log("WARNING", message);
+void UserLogger::logWarning(const std::string &message) {
+    log("WARNING", message);
 }
 
-void UserLogger::LogInfo(const std::string &message) {
-    Log("INFO", message);
+void UserLogger::logInfo(const std::string &message) {
+    log("INFO", message);
 }
 
-void UserLogger::LogDebug(const std::string &message) {
-    Log("DEBUG", message);
+void UserLogger::logDebug(const std::string &message) {
+    log("DEBUG", message);
 }
 
-void UserLogger::Log(const std::string &level, const std::string &message) {
+void UserLogger::log(const std::string &level, const std::string &message) {
     auto log_entry = level + ": " + message;
     {
         std::lock_guard<std::mutex> lock(queue_mutex_);
@@ -175,7 +175,7 @@ void UserLogger::Log(const std::string &level, const std::string &message) {
     condition_.notify_one();
 }
 
-void UserLogger::ProcessLogQueue() {
+void UserLogger::processLogQueue() {
     std::vector<std::string> queue_to_write;
     while (true) {
         {
@@ -210,12 +210,12 @@ void UserLogger::ProcessLogQueue() {
     }
 }
 
-void UserLogger::Initialize() {
+void UserLogger::initialize() {
     // Start the background thread
-    logging_thread_ = std::thread(&UserLogger::ProcessLogQueue, this);
+    logging_thread_ = std::thread(&UserLogger::processLogQueue, this);
 }
 
-void UserLogger::Shutdown() {
+void UserLogger::shutdown() {
     {
         std::lock_guard<std::mutex> lock(queue_mutex_);
         shutdown_ = true;

@@ -38,7 +38,7 @@ BrackEngine::BrackEngine(Config &&config) {
 }
 
 void BrackEngine::Run() {
-    Logger::Debug("Updating systems");
+    Logger::debug("Updating systems");
     while (ConfigSingleton::GetInstance().IsRunning()) {
         FPSSingleton::GetInstance().Start();
         milliseconds deltaTime = GetDeltaTime();
@@ -109,14 +109,14 @@ void BrackEngine::save(const std::string &filePath, const std::string &content) 
     // Write the size of the string first
     size_t size = content.size();
     if (!file.write(reinterpret_cast<const char *>(&size), sizeof(size_t))) {
-        std::cerr << "Error writing size to file: " << filePath << std::endl;
+        std::cerr << "error writing size to file: " << filePath << std::endl;
         file.close(); // Close the file before returning
         return;
     }
 
     // Write the content of the string
     if (!file.write(content.c_str(), size)) {
-        std::cerr << "Error writing content to file: " << filePath << std::endl;
+        std::cerr << "error writing content to file: " << filePath << std::endl;
     }
 
     file.close();
@@ -134,14 +134,14 @@ std::string BrackEngine::load(const std::string &filePath) const {
     // Read the size of the string first
     size_t size;
     if (!file.read(reinterpret_cast<char *>(&size), sizeof(size_t))) {
-        std::cerr << "Error reading size from file: " << filePath << std::endl;
+        std::cerr << "error reading size from file: " << filePath << std::endl;
         return "";
     }
 
     // Read the content of the string
     std::string content(size, '\0');
     if (!file.read(&content[0], size)) {
-        std::cerr << "Error reading content from file: " << filePath << std::endl;
+        std::cerr << "error reading content from file: " << filePath << std::endl;
     }
 
     file.close();

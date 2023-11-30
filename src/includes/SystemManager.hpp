@@ -54,7 +54,7 @@ public:
         if (systemIt != systems.end()) {
             return std::dynamic_pointer_cast<T>(*systemIt);
         } else {
-            Logger::Warning(std::string("System not found: ") + typeid(T).name());
+            Logger::warning(std::string("System not found: ") + typeid(T).name());
             return std::weak_ptr<T>();
         }
     }
@@ -81,7 +81,7 @@ public:
             systems.erase(systemToRemoveIt);
             SortSystems();
         } else {
-            Logger::Warning(std::string("System not found: ") + typeid(T).name());
+            Logger::warning(std::string("System not found: ") + typeid(T).name());
         }
     }
 

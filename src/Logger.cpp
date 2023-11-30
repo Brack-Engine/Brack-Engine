@@ -38,8 +38,8 @@ Logger::Logger() {
     // Create directories if they don't exist
     CreateDirectories("logging/engine");
 
-    OpenLogFile(fileName);
-    Initialize();
+    openLogFile(fileName);
+    initialize();
 #endif
 }
 
@@ -50,7 +50,7 @@ void Logger::CheckAndCleanOldLogs() {
     std::vector<std::filesystem::directory_entry> logFiles;
 
     // Gather list of log files
-    for (const auto& entry : std::filesystem::directory_iterator(logDir)) {
+    for (const auto &entry: std::filesystem::directory_iterator(logDir)) {
         if (entry.is_regular_file()) {
             logFiles.push_back(entry);
         }
@@ -58,7 +58,7 @@ void Logger::CheckAndCleanOldLogs() {
 
     // Sort files by last write time in descending order (newest first)
     std::sort(logFiles.begin(), logFiles.end(),
-              [](const std::filesystem::directory_entry& a, const std::filesystem::directory_entry& b) {
+              [](const std::filesystem::directory_entry &a, const std::filesystem::directory_entry &b) {
                   return std::filesystem::last_write_time(a) > std::filesystem::last_write_time(b);
               });
 
@@ -72,7 +72,7 @@ void Logger::CheckAndCleanOldLogs() {
 }
 
 
-void Logger::CreateDirectories(const std::string& dir) {
+void Logger::CreateDirectories(const std::string &dir) {
 #if defined(_WIN32)
     std::string command = "mkdir " + dir;
     system(command.c_str());
@@ -97,7 +97,7 @@ Logger::~Logger() {
         logFile.close();
     }
 
-    Shutdown();
+    shutdown();
 #endif
 }
 
@@ -108,7 +108,7 @@ Logger &Logger::GetInstance() {
 
 #ifdef LOG_TO_FILE
 
-void Logger::OpenLogFile(const std::string &filename) {
+void Logger::openLogFile(const std::string &filename) {
     std::lock_guard<std::mutex> lock(fileMutex);
     if (!logFile.is_open()) {
         // Clean up old logs before opening a new file
@@ -124,48 +124,48 @@ void Logger::OpenLogFile(const std::string &filename) {
 #endif
 
 // Static methods to check log level and log if appropriate
-void Logger::Error(const std::string &message) {
+void Logger::error(const std::string &message) {
 #if CURRENT_LOG_LEVEL >= LOG_LEVEL_ERROR
-    GetInstance().LogError(message);
+    GetInstance().logError(message);
     throw std::runtime_error(message);
 #endif
 }
 
-void Logger::Warning(const std::string &message) {
+void Logger::warning(const std::string &message) {
 #if CURRENT_LOG_LEVEL >= LOG_LEVEL_WARNING
-    GetInstance().LogWarning(message);
+    GetInstance().logWarning(message);
 #endif
 }
 
-void Logger::Info(const std::string &message) {
+void Logger::info(const std::string &message) {
 #if CURRENT_LOG_LEVEL >= LOG_LEVEL_INFO
-    GetInstance().LogInfo(message);
+    GetInstance().logInfo(message);
 #endif
 }
 
-void Logger::Debug(const std::string &message) {
+void Logger::debug(const std::string &message) {
 #if CURRENT_LOG_LEVEL >= LOG_LEVEL_DEBUG
-    GetInstance().LogDebug(message);
+    GetInstance().logDebug(message);
 #endif
 }
 
-void Logger::LogError(const std::string &message) {
-    Log("ERROR", message);
+void Logger::logError(const std::string &message) {
+    log("ERROR", message);
 }
 
-void Logger::LogWarning(const std::string &message) {
-    Log("WARNING", message);
+void Logger::logWarning(const std::string &message) {
+    log("WARNING", message);
 }
 
-void Logger::LogInfo(const std::string &message) {
-    Log("INFO", message);
+void Logger::logInfo(const std::string &message) {
+    log("INFO", message);
 }
 
-void Logger::LogDebug(const std::string &message) {
-    Log("DEBUG", message);
+void Logger::logDebug(const std::string &message) {
+    log("DEBUG", message);
 }
 
-void Logger::Log(const std::string &level, const std::string &message) {
+void Logger::log(const std::string &level, const std::string &message) {
     auto log_entry = level + ": " + message;
     {
         std::lock_guard<std::mutex> lock(queue_mutex_);
@@ -174,7 +174,7 @@ void Logger::Log(const std::string &level, const std::string &message) {
     condition_.notify_one();
 }
 
-void Logger::ProcessLogQueue() {
+void Logger::processLogQueue() {
     std::vector<std::string> queue_to_write;
     while (true) {
         {
@@ -209,12 +209,12 @@ void Logger::ProcessLogQueue() {
     }
 }
 
-void Logger::Initialize() {
+void Logger::initialize() {
     // Start the background thread
-    logging_thread_ = std::thread(&Logger::ProcessLogQueue, this);
+    logging_thread_ = std::thread(&Logger::processLogQueue, this);
 }
 
-void Logger::Shutdown() {
+void Logger::shutdown() {
     {
         std::lock_guard<std::mutex> lock(queue_mutex_);
         shutdown_ = true;

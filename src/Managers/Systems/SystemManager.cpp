@@ -10,7 +10,7 @@ SystemManager SystemManager::instance;
 
 void SystemManager::AddSystems(std::vector<std::shared_ptr<ISystem>> newSystems, bool printGraph) {
     for (auto &system: newSystems) {
-        Logger::Info("Added system " + system->getName());
+        Logger::info("Added system " + system->getName());
         systems.push_back(system); // No need to std::move
     }
 
@@ -21,7 +21,7 @@ void SystemManager::AddSystems(std::vector<std::shared_ptr<ISystem>> newSystems,
 }
 
 void SystemManager::AddSystem(std::shared_ptr<ISystem> system, bool printGraph) {
-    Logger::Info("Added system " + system->getName());
+    Logger::info("Added system " + system->getName());
     systems.push_back(system);
 
     if (printGraph)
@@ -107,7 +107,7 @@ void SystemManager::SortSystems() {
     }
 
     if (!errorString.empty()) {
-        Logger::Error(errorString);
+        Logger::error(errorString);
     }
 
     systems = std::move(sortedList);

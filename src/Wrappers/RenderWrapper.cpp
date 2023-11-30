@@ -53,7 +53,7 @@ bool RenderWrapper::Initialize() {
 
     if (renderer == nullptr) {
         std::cerr << "Renderer creation failed: " << SDL_GetError() << std::endl;
-        Logger::GetInstance().Shutdown();
+        Logger::GetInstance().shutdown();
         SDL_DestroyWindow(window.get());
         Cleanup();
         return false;
@@ -76,7 +76,7 @@ bool RenderWrapper::Initialize() {
 
 void RenderWrapper::Cleanup() {
     // Perform cleanup as necessary
-    Logger::GetInstance().Shutdown();
+    Logger::GetInstance().shutdown();
     SDL_Quit();
     TTF_Quit();
     IMG_Quit();
@@ -102,7 +102,7 @@ std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> RenderWrapper::GetSp
 
     size_t dotPos = newPath.find_last_of('.');
     if (dotPos == std::string::npos) {
-        std::cerr << "Error: Invalid file path (no file extension)" << std::endl;
+        std::cerr << "error: Invalid file path (no file extension)" << std::endl;
         return std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>(nullptr, &SDL_DestroyTexture);
     }
 
@@ -116,7 +116,7 @@ std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> RenderWrapper::GetSp
             SDL_FreeSurface(surface);
             return std::move(bmpTexture);
         } else {
-            std::cerr << "Error: Failed to load BMP file: " << SDL_GetError() << std::endl;
+            std::cerr << "error: Failed to load BMP file: " << SDL_GetError() << std::endl;
         }
     } else if (extension == "png") {
         SDL_Texture *pngTexture = IMG_LoadTexture(renderer.get(), newPath.c_str());
@@ -124,10 +124,10 @@ std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> RenderWrapper::GetSp
         if (pngTexture) {
             return std::move(texture);
         } else {
-            std::cerr << "Error: Failed to load PNG file: " << IMG_GetError() << std::endl;
+            std::cerr << "error: Failed to load PNG file: " << IMG_GetError() << std::endl;
         }
     } else {
-        std::cerr << "Error: Unsupported file type: " << extension << std::endl;
+        std::cerr << "error: Unsupported file type: " << extension << std::endl;
     }
 
     return std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>(nullptr, &SDL_DestroyTexture);
@@ -295,12 +295,12 @@ void RenderWrapper::RenderUiText(const TextComponent &textComponent, const Trans
     SDL_Surface *surface = TTF_RenderText_Solid(font, textComponent.text.c_str(), sdlColor);
 
     if (!surface) {
-        std::cerr << "TTF_RenderText_Solid Error: " << TTF_GetError() << std::endl;
+        std::cerr << "TTF_RenderText_Solid error: " << TTF_GetError() << std::endl;
     }
 
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer.get(), surface);
     if (!texture) {
-        std::cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+        std::cerr << "SDL_CreateTextureFromSurface error: " << SDL_GetError() << std::endl;
     }
 
     SDL_Rect rect = {static_cast<int>(transformComponent.position->getX()),
@@ -407,7 +407,7 @@ RenderWrapper::RenderText(const CameraComponent &cameraComponent, const Transfor
     SDL_Surface *surface = TTF_RenderText_Solid(font, textComponent.text.c_str(), sdlColor);
 
     if (!surface) {
-        std::cerr << "TTF_RenderText_Solid Error: " << TTF_GetError() << std::endl;
+        std::cerr << "TTF_RenderText_Solid error: " << TTF_GetError() << std::endl;
     }
 
     auto &cameraPosition = cameraTransformComponent.position;
@@ -424,7 +424,7 @@ RenderWrapper::RenderText(const CameraComponent &cameraComponent, const Transfor
 
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer.get(), surface);
     if (!texture) {
-        std::cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+        std::cerr << "SDL_CreateTextureFromSurface error: " << SDL_GetError() << std::endl;
     }
 
     SDL_Rect rect = {
