@@ -24,7 +24,6 @@ struct BehaviourScript : public IComponent {
 
     virtual void accept(ComponentVisitor &visitor) override {
         visitor.visit(*this);
-        onStart();
     }
 
     BehaviourScript(const BehaviourScript &other) : IComponent(other) {}
@@ -53,6 +52,10 @@ struct BehaviourScript : public IComponent {
 
     static std::vector<GameObject> getGameObjectsByTag(const std::string &tag) {
         return GameObjectConverter::getGameObjectsByTag(tag);
+    }
+
+    std::vector<GameObject> getChildren() {
+        return GameObjectConverter::getChildren(entityID);
     }
 };
 

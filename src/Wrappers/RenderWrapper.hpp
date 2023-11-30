@@ -29,7 +29,7 @@ public:
 
     ~RenderWrapper();
 
-    void RenderCamera(const CameraComponent &cameraComponent, const TransformComponent &transformComponent);
+    void RenderCamera(const CameraComponent &cameraComponent);
 
     void RenderSprite(const CameraComponent &cameraComponent, const TransformComponent &cameraTransformComponent,
                       const SpriteComponent &spriteComponent, const TransformComponent &transformComponent);
@@ -68,12 +68,13 @@ public:
 private:
     bool Initialize();
 
-    void render(SDL_Texture *texture, SDL_Rect *srcrect, SDL_Rect *dstrect, float rotation) const;
+    void render(SDL_Texture *texture, SDL_Rect *srcrect, SDL_Rect *dstrect, float rotation, const bool flipX,
+                const bool flipY) const;
 
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> GetSpriteTexture(std::string filePath);
 
     std::pair<SDL_Rect, std::unique_ptr<SDL_Texture, void (*)(SDL_Texture *)>> &
-    GetCameraTexturePair(const CameraComponent &cameraComponent, const TransformComponent &transformComponent);
+    GetCameraTexturePair(const CameraComponent &cameraComponent);
 
     std::map<entity, std::pair<SDL_Rect, std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>>> cameraTextures;
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> renderTexture;

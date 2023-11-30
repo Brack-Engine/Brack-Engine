@@ -24,10 +24,10 @@ struct ParentComponent : public IComponent {
     }
 
     ParentComponent(const ParentComponent &other) : IComponent(other) {
-        parentID = other.parentID;
+        parentId = other.parentId;
     }
 
-    entity parentID;
+    entity parentId;
 };
 
 #endif //BRACK_ENGINE_PARENTCOMPONENT_HPP

@@ -11,7 +11,7 @@ void Scene::AddGameObject(std::unique_ptr<GameObject> gameObject) {
 
 std::unique_ptr<GameObject> &Scene::GetGameObjectByName(char *name) {
     for (auto &gameObject: gameObjects) {
-        if (gameObject->GetName() == name)
+        if (gameObject->getName() == name)
             return gameObject;
     }
 
@@ -21,7 +21,7 @@ std::unique_ptr<GameObject> &Scene::GetGameObjectByName(char *name) {
 std::vector<GameObject *> Scene::GetGameObjectsByTag(const std::string &tag) {
     std::vector<GameObject *> gameObjectsWithTag;
     for (auto &gameObject: gameObjects) {
-        if (gameObject->GetTag() == tag) {
+        if (gameObject->getTag() == tag) {
             gameObjectsWithTag.push_back(gameObject.get());
         }
     }

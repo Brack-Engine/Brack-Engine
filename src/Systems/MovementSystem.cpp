@@ -3,6 +3,7 @@
 //
 
 #include <Components/VelocityComponent.hpp>
+#include <Components/ChildComponent.hpp>
 #include "MovementSystem.hpp"
 #include "../includes/ComponentStore.hpp"
 

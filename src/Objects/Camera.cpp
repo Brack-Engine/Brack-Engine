@@ -9,7 +9,7 @@
 
 
 Camera::Camera() : GameObject() {
-    AddComponent(std::make_unique<CameraComponent>());
+    addComponent(std::make_unique<CameraComponent>());
     SetBackgroundColor(Color(0, 0, 0, 255));
     auto size = ConfigSingleton::GetInstance().GetWindowSize();
     auto halfSize = size / 2;

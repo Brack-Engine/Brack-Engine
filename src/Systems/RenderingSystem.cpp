@@ -25,7 +25,7 @@ void RenderingSystem::update(milliseconds deltaTime) {
         if (!cameraComponent.isActive)
             continue;
         auto &cameraTransformComponent = ComponentStore::GetInstance().tryGetComponent<TransformComponent>(cameraId);
-        sdl2Wrapper->RenderCamera(cameraComponent, cameraTransformComponent);
+        sdl2Wrapper->RenderCamera(cameraComponent);
         for (auto component: components) {
             auto &transformComponent = ComponentStore::GetInstance().tryGetComponent<TransformComponent>(
                     component->entityID);

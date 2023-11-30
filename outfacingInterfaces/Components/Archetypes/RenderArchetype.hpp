@@ -26,10 +26,14 @@ public:
     RenderArchetype(const RenderArchetype &other) : IComponent(other) {
         sortingLayer = other.sortingLayer;
         orderInLayer = other.orderInLayer;
+        flipX = other.flipX;
+        flipY = other.flipY;
     }
 
-    int sortingLayer = 0;
+    int sortingLayer = 1;
     int orderInLayer = 0;
+    bool flipX = false;
+    bool flipY = false;
 };
 
 #endif //BRACKOCALYPSE_RENDERARCHETYPE_HPP

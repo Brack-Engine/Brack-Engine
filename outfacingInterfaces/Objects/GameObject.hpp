@@ -11,6 +11,7 @@
 #include <string>
 #include <typeinfo>
 #include <stdexcept>
+#include <optional>
 #include "../src/includes/ComponentStore.hpp"
 #include "../Entity.hpp"
 
@@ -20,6 +21,10 @@ public:
 
     ~GameObject() {
         components.clear();
+        delete parent;
+        for (auto &child: children) {
+            delete child;
+        }
     };
 
     GameObject &operator=(const GameObject &other) {
@@ -43,14 +48,17 @@ public:
 
     template<typename T>
     typename std::enable_if<std::is_base_of<IComponent, T>::value>::type
-    AddComponent(std::unique_ptr<T> component) {
-        components.push_back(std::move(component));
+    addComponent(std::unique_ptr<T> component) {
+        if (entityID == 0)
+            components.push_back(std::move(component));
+        else
+            ComponentStore::GetInstance().addComponent<T>(entityID, *component.get());
     }
 
     template<typename T>
     typename std::enable_if<std::is_base_of<IComponent, T>::value>::type
-    AddComponent(T component) {
-        AddComponent(std::make_unique<T>(component));
+    addComponent(T component) {
+        addComponent(std::make_unique<T>(component));
     }
 
 
@@ -64,10 +72,11 @@ public:
 
     template<typename T>
     typename std::enable_if<std::is_base_of<IComponent, T>::value, bool>::type
-    HasComponent(T &component) {
-        for (auto &comp: components) {
-            if (dynamic_cast<T>(comp))
+    hasComponent() const {
+        for (const auto &comp: components) {
+            if (dynamic_cast<const T *>(comp.get()) != nullptr) {
                 return true;
+            }
         }
         return false;
     }
@@ -90,48 +99,58 @@ public:
 
     template<typename T>
     typename std::enable_if<std::is_base_of<IComponent, T>::value>::type
-    RemoveComponent() {
-        for (auto it = components.begin(); it != components.end();) {
-            T *comp = dynamic_cast<T *>(it->get());
-            if (comp != nullptr) {
-                it = components.erase(it);
-            } else {
-                ++it;
+    removeComponent() {
+        if (entityID == 0) {
+            for (auto it = components.begin(); it != components.end();) {
+                T *comp = dynamic_cast<T *>(it->get());
+                if (comp != nullptr) {
+                    it = components.erase(it);
+                } else {
+                    ++it;
+                }
             }
+        } else {
+            ComponentStore::GetInstance().removeComponent<T>(entityID);
         }
     }
 
-    GameObject &GetParent();
+    std::optional<GameObject> getParent();
 
-    std::vector<GameObject> GetChildren();
+    std::vector<GameObject *> getChildren() const;
 
-    std::string GetName() const;
+    void addChild(GameObject &child);
 
-    void SetName(std::string name);
+    void removeChild(GameObject &child);
 
-    std::string GetTag() const;
+    std::string getName() const;
 
-    void SetTag(std::string name);
+    void setName(std::string name) const;
 
-    bool IsActive() const;
+    std::string getTag() const;
 
-    void SetActive(bool active);
+    void setTag(std::string name) const;
 
-    int GetLayer() const;
+    bool isActive() const;
 
-    void SetLayer(int layer);
+    void setActive(bool active) const;
+
+    int getLayer() const;
 
     void setRotation(float rotation) const;
 
-    entity GetEntityID() const;
+    void setLayer(int layer) const;
 
-    void SetEntityID(entity id);
+    entity getEntityId() const;
 
-    std::vector<std::unique_ptr<IComponent>> &GetAllComponents();
+    void setEntityId(entity id);
+
+    std::vector<std::unique_ptr<IComponent>> &getAllComponents();
 
 protected:
     entity entityID = 0;
     std::vector<std::unique_ptr<IComponent>> components;
+    GameObject *parent = nullptr;
+    std::vector<GameObject *> children;
 };
 
 

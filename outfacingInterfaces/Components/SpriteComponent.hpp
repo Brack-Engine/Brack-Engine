@@ -47,8 +47,6 @@ struct SpriteComponent : public RenderArchetype {
         if (other.color != nullptr)
             color = std::make_unique<Color>(*other.color);
 
-        flipX = other.flipX;
-        flipY = other.flipY;
         sortingLayer = other.sortingLayer;
         orderInLayer = other.orderInLayer;
         margin = other.margin;
@@ -63,8 +61,6 @@ struct SpriteComponent : public RenderArchetype {
     std::unique_ptr<Vector2> spriteSize = std::make_unique<Vector2>(0, 0);
     std::unique_ptr<Vector2> tileOffset = std::make_unique<Vector2>(0, 0);
     std::unique_ptr<Color> color = std::make_unique<Color>(0, 0, 0, 255);
-    bool flipX = false;
-    bool flipY = false;
     int margin = 0;
 };
 

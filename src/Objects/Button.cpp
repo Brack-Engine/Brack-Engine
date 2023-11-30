@@ -21,10 +21,10 @@ Button::Button(const Vector2 &size, const std::string &text) : GameObject() {
 
     auto clickableComponent = std::make_unique<ClickableComponent>();
 
-    AddComponent(std::move(boxCollisionComponent));
-    AddComponent(std::move(clickableComponent));
-    AddComponent(std::move(rectangleComponent));
-    AddComponent(std::move(textComponent));
+    addComponent(std::move(boxCollisionComponent));
+    addComponent(std::move(clickableComponent));
+    addComponent(std::move(rectangleComponent));
+    addComponent(std::move(textComponent));
 }
 
 void Button::SetTextColor(const Color &color) {

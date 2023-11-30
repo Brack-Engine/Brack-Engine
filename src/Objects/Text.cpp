@@ -11,7 +11,7 @@
 Text::Text(const std::string &text) : GameObject() {
     auto textComponent = std::make_unique<TextComponent>();
     textComponent->text = text;
-    AddComponent(std::move(textComponent));
+    addComponent(std::move(textComponent));
 }
 
 void Text::SetFontSize(int fontSize) {

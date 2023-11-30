@@ -13,13 +13,8 @@
 
 class GameObjectConverter {
 public:
-    static Camera getMainCamera(entity entityID);
-
-    static GameObject getGameObject(entity entityID);
 
     static void addGameObject(GameObject *gameObject);
-
-    static void addCamera(Camera *camera);
 
     static std::optional<GameObject> getGameObjectByName(const std::string &name);
 
@@ -28,6 +23,10 @@ public:
     static std::optional<GameObject> getGameObjectByTag(const std::string &tag);
 
     static std::vector<GameObject> getGameObjectsByTag(const std::string &tag);
+
+    static std::vector<GameObject> getChildren(entity entityID);
+
+    static std::optional<GameObject> getParent(entity entityID);
 
     static void removeGameObject(GameObject &gameObject);
 };

@@ -2,6 +2,8 @@
 // Created by jesse on 02/11/2023.
 //
 
+#include <Components/ChildComponent.hpp>
+#include <Components/ParentComponent.hpp>
 #include "EngineManagers/SceneManager.hpp"
 #include "Objects/Scene.hpp"
 #include "../GameObjectConverter.hpp"
@@ -10,8 +12,9 @@ SceneManager SceneManager::instance;
 
 void SceneManager::setActiveScene(Scene &scene) {
     EntityManager::getInstance().clearAllEntities();
+
     for (auto camera: scene.GetAllCameras())
-        GameObjectConverter::addCamera(camera);
+        GameObjectConverter::addGameObject(camera);
 
     for (auto gameObject: scene.GetAllGameObjects()) {
         GameObjectConverter::addGameObject(gameObject);

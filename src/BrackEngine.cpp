@@ -76,6 +76,8 @@ void BrackEngine::CreateFPS() {
     textComponent.fontSize = 32;
     textComponent.color = std::make_unique<Color>(255, 0, 0, 255);
     textComponent.entityID = entityId;
+    textComponent.sortingLayer = 0;
+    textComponent.orderInLayer = 0;
 
     ComponentStore::GetInstance().addComponent<TransformComponent>(entityId);
     ComponentStore::GetInstance().addComponent<ObjectInfoComponent>(objectInfoComponent);
