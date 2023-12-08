@@ -21,15 +21,15 @@ public:
 
     void addGameObject(std::unique_ptr<GameObject> gameObject);
 
-    GameObject *getGameObjectByName(const std::string name);
+    std::unique_ptr<GameObject> &getGameObjectByName(const std::string name);
 
     std::vector<GameObject *> getGameObjectsByTag(const std::string &tag);
 
-    std::vector<GameObject *> getAllGameObjects();
+    std::vector<std::unique_ptr<GameObject>> &getAllGameObjects();
 
-    std::vector<Camera *> getAllCameras();
+    std::vector<std::unique_ptr<Camera>> &getAllCameras();
 
-    void removeGameObject(GameObject &gameObject);
+    void removeGameObject(std::unique_ptr<GameObject> &gameObject);
 
     void removeGameObjectByName(std::string name);
 
@@ -41,12 +41,13 @@ public:
 
 private:
     std::vector<std::unique_ptr<GameObject>> gameObjects;
+    std::map<std::string, std::reference_wrapper<std::unique_ptr<GameObject>>> nameToGameObject;
+    std::map<std::string, std::vector<std::reference_wrapper<std::unique_ptr<GameObject>>>> tagToGameObject;
     std::vector<std::unique_ptr<Camera>> cameras;
 
     std::string generateSignature();
 
     std::string signature;
-
 };
 
 

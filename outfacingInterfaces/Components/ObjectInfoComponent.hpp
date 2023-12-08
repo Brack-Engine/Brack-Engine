@@ -25,7 +25,7 @@ struct ObjectInfoComponent : public IComponent {
         isActive = other.isActive;
     }
 
-    std::string name, tag;
+    std::string name, tag = "";
     int layer;
     bool isActive = true;
 };

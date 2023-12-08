@@ -22,7 +22,7 @@ public:
 
     void operator=(ConfigSingleton &&) = delete;
 
-    void SetConfig(Config config);
+    void SetConfig(std::unique_ptr<Config> config);
 
     void SetIsRunning(bool isRunning);
 

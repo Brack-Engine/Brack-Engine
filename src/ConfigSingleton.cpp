@@ -46,16 +46,16 @@ int ConfigSingleton::getAmountOfSoundEffectsChannels() const {
     return amountOfSoundEffectsChannels;
 }
 
-void ConfigSingleton::SetConfig(Config config) {
-    isRunning = config.isRunning;
-    windowTitle = config.windowTitle;
-    windowSize = config.windowSize;
-    fullscreen = config.fullscreen;
-    BaseAssetPath = config.BaseAssetPath;
-    showFPS = config.showFPS;
-    amountOfSoundEffectsChannels = config.amountOfSoundEffectsChannels;
-    fpsLimit = config.fpsLimit;
-    particleLimit = config.particleLimit;
+void ConfigSingleton::SetConfig(std::unique_ptr<Config> config) {
+    isRunning = config->isRunning;
+    windowTitle = config->windowTitle;
+    windowSize = config->windowSize;
+    fullscreen = config->fullscreen;
+    BaseAssetPath = config->BaseAssetPath;
+    showFPS = config->showFPS;
+    amountOfSoundEffectsChannels = config->amountOfSoundEffectsChannels;
+    fpsLimit = config->fpsLimit;
+    particleLimit = config->particleLimit;
 }
 
 bool ConfigSingleton::ShowFPS() const {

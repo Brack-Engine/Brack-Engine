@@ -7,34 +7,32 @@
 
 void Scene::addGameObject(std::unique_ptr<GameObject> gameObject) {
     if (SceneManager::getInstance().getActiveSceneSignature() == signature) {
-        GameObjectConverter::addGameObject(gameObject.get());
-        return;
-    }
+        GameObjectConverter::addGameObject(gameObject);
+        gameObjects.push_back(std::move(gameObject));
+    } else
+        gameObjects.push_back(std::move(gameObject));
 
-    gameObjects.push_back(std::move(gameObject));
-}
-
-GameObject *Scene::getGameObjectByName(const std::string name) {
-    if (SceneManager::getInstance().getActiveSceneSignature() == signature) {
-        auto optional = GameObjectConverter::getGameObjectByName(name);
-        if (optional.has_value()) {
-            return *optional;
+    if (!gameObjects.back()->getName().empty())
+        nameToGameObject.insert({gameObjects.back()->getName(), gameObjects.back()});
+    if (!gameObjects.back()->getTag().empty()) {
+        if (tagToGameObject.count(gameObjects.back()->getTag()) > 0) {
+            tagToGameObject.find(gameObjects.back()->getTag())->second.push_back(gameObjects.back());
+        } else {
+            tagToGameObject.insert(
+                    {gameObjects.back()->getTag(), std::vector<std::reference_wrapper<std::unique_ptr<GameObject>>>()});
+            tagToGameObject.find(gameObjects.back()->getTag())->second.push_back(gameObjects.back());
         }
     }
+}
 
-    for (auto &gameObject: gameObjects) {
-        if (gameObject->getName() == name)
-            return gameObject.get();
-    }
+std::unique_ptr<GameObject> &Scene::getGameObjectByName(const std::string name) {
+    if (nameToGameObject.find(name) != nameToGameObject.end())
+        return nameToGameObject.find(name)->second;
 
     throw std::runtime_error("No GameObject with name " + std::string(name) + " found.");
 }
 
 std::vector<GameObject *> Scene::getGameObjectsByTag(const std::string &tag) {
-    if (SceneManager::getInstance().getActiveSceneSignature() == signature) {
-        return GameObjectConverter::getGameObjectsByTag(tag);
-    }
-
     std::vector<GameObject *> gameObjectsWithTag;
     for (auto &gameObject: gameObjects) {
         if (gameObject->getTag() == tag) {
@@ -45,51 +43,48 @@ std::vector<GameObject *> Scene::getGameObjectsByTag(const std::string &tag) {
     return gameObjectsWithTag;
 }
 
-std::vector<GameObject *> Scene::getAllGameObjects() {
-    std::vector<GameObject *> gameObjectsPtrs;
-    for (auto &gameObject: gameObjects) {
-        gameObjectsPtrs.push_back(gameObject.get());
-    }
-    return gameObjectsPtrs;
+std::vector<std::unique_ptr<GameObject>> &Scene::getAllGameObjects() {
+    return gameObjects;
 }
 
-std::vector<Camera *> Scene::getAllCameras() {
-    std::vector<Camera *> camerasPtrs;
-    for (auto &camera: cameras) {
-        camerasPtrs.push_back(camera.get());
-    }
-    return camerasPtrs;
+std::vector<std::unique_ptr<Camera>> &Scene::getAllCameras() {
+    return cameras;
 }
 
 void Scene::removeGameObjectByName(std::string name) {
-    auto gameObject = getGameObjectByName(name);
+    auto &gameObject = getGameObjectByName(name);
 
-    if (SceneManager::getInstance().getActiveSceneSignature() == signature) {
-        GameObjectConverter::removeGameObject(gameObject);
-        return;
-    }
-
-    auto it = std::find_if(gameObjects.begin(), gameObjects.end(),
-                           [&gameObject](const std::unique_ptr<GameObject> &ptr) {
-                               return ptr.get() == gameObject;
-                           });
-    if (it != gameObjects.end()) {
-        gameObjects.erase(it);
-    }
+    removeGameObject(gameObject);
 }
 
-void Scene::removeGameObject(GameObject &gameObject) {
+void Scene::removeGameObject(std::unique_ptr<GameObject> &gameObject) {
+    std::string name = gameObject->getName();
+    std::string tag = gameObject->getTag();
+
     if (SceneManager::getInstance().getActiveSceneSignature() == signature) {
         GameObjectConverter::removeGameObject(gameObject);
-        return;
     }
 
     auto it = std::find_if(gameObjects.begin(), gameObjects.end(),
                            [&gameObject](const std::unique_ptr<GameObject> &ptr) {
-                               return ptr.get() == &gameObject;
+                               return ptr == gameObject;
                            });
     if (it != gameObjects.end()) {
         gameObjects.erase(it);
+    }
+
+    if (!name.empty())
+        nameToGameObject.erase(name);
+
+    if (!tag.empty()) {
+        auto &gameObjectsWithTag = tagToGameObject.find(tag)->second;
+        auto it = std::find_if(gameObjectsWithTag.begin(), gameObjectsWithTag.end(),
+                               [&gameObject](const std::reference_wrapper<std::unique_ptr<GameObject>> &ptr) {
+                                   return ptr.get() == gameObject;
+                               });
+        if (it != gameObjectsWithTag.end()) {
+            gameObjectsWithTag.erase(it);
+        }
     }
 }
 

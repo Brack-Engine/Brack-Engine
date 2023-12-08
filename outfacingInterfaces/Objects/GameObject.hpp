@@ -22,7 +22,8 @@ public:
     GameObject(entity id);
 
     ~GameObject() {
-
+        children.clear();
+        components.clear();
     };
 
     GameObject &operator=(const GameObject &other) {

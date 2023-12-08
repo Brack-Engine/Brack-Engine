@@ -16,7 +16,7 @@ class ReplaySystem : public ISystem {
 public:
     struct ECSSnapshot {
         std::unordered_set<entity> entities;
-        std::map<std::string, std::vector<entity>> entitiesByName;
+        std::map<std::string, entity> entitiesByName;
         std::map<std::string, std::vector<entity>> entitiesByTag;
 
         std::unordered_map<std::type_index, std::unordered_map<entity, std::unique_ptr<IComponent>>> componentStates;
@@ -39,6 +39,7 @@ public:
     const std::string getName() const override;
 
     void cleanUp() override;
+
     void clearCache() override;
 
 private:

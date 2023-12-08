@@ -29,17 +29,17 @@ public:
 
     void setActiveScene(Scene &scene);
 
-    static std::optional<GameObject> getGameObjectByName(const std::string &name);
+    std::optional<GameObject> getGameObjectByName(const std::string &name);
 
-    static std::vector<GameObject> getGameObjectsByName(const std::string &name);
+    std::optional<GameObject> getGameObjectByTag(const std::string &tag);
 
-    static std::optional<GameObject> getGameObjectByTag(const std::string &tag);
+    std::vector<GameObject *> getGameObjectsByTag(const std::string &tag);
 
-    static std::vector<GameObject *> getGameObjectsByTag(const std::string &tag);
-
-    static Vector2 getWorldPosition(const TransformComponent &transformComponent);
+    Vector2 getWorldPosition(const TransformComponent &transformComponent);
 
     std::string getActiveSceneSignature();
+
+    Scene &getActiveScene();
 
 private:
     SceneManager() = default;
@@ -47,6 +47,7 @@ private:
     static SceneManager instance;
     bool hasChanged = false;
 
+    std::optional<std::reference_wrapper<Scene>> activeScene;
     std::string activeSceneSignature;
 
 };

@@ -17,7 +17,7 @@
 
 class BrackEngine {
 public:
-    BrackEngine(Config &&config);
+    BrackEngine(std::unique_ptr<Config> config);
 
     ~BrackEngine() = default;
 

@@ -33,19 +33,15 @@ struct BehaviourScript : public IComponent {
         return ComponentStore::GetInstance().tryGetComponent<T>(entityID);
     }
 
-    static std::optional<GameObject *> getGameObjectByName(const std::string &name) {
+    static std::optional<GameObject> getGameObjectByName(const std::string &name) {
         return GameObjectConverter::getGameObjectByName(name);
     }
-
-    static std::vector<GameObject> getGameObjectsByName(const std::string &name) {
-        return GameObjectConverter::getGameObjectsByName(name);
-    }
-
+    
     static std::optional<GameObject> getGameObjectByTag(const std::string &tag) {
         return GameObjectConverter::getGameObjectByTag(tag);
     }
 
-    static std::vector<GameObject *> getGameObjectsByTag(const std::string &tag) {
+    static std::vector<GameObject> getGameObjectsByTag(const std::string &tag) {
         return GameObjectConverter::getGameObjectsByTag(tag);
     }
 

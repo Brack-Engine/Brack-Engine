@@ -38,9 +38,7 @@ public:
     void addEntityWithName(entity entityId, const std::string &name);
 
     void addEntityWithTag(entity entityId, const std::string &tag);
-
-    std::vector<entity> getEntitiesByName(const std::string &name) const;
-
+    
     void addEntitiesByTags(std::map<std::string, std::vector<entity>> entitiesByTag);
 
     void addEntitiesByName(std::map<std::string, std::vector<entity>> entitiesByName);
@@ -53,11 +51,11 @@ public:
 
     entity getEntityByTag(const std::string &tag) const;
 
-    std::map<std::string, std::vector<entity>> getEntitiesByNameMap() const;
+    std::map<std::string, entity> getEntitiesByNameMap() const;
 
     std::map<std::string, std::vector<entity>> getEntitiesByTagMap() const;
 
-    void setEntitiesByNameMap(const std::map<std::string, std::vector<entity>> &entitiesByName);
+    void setEntitiesByNameMap(const std::map<std::string, entity> &entitiesByName);
 
     void setEntitiesByTagMap(const std::map<std::string, std::vector<entity>> &entitiesByTag);
 
@@ -75,7 +73,7 @@ private:
     std::vector<entity> reserveEntities;
     std::map<entity, std::string> entityToName;
     std::map<entity, std::string> entityToTag;
-    std::map<std::string, std::vector<entity>> nameToEntity;
+    std::map<std::string, entity> nameToEntity;
     std::map<std::string, std::vector<entity>> tagToEntity;
     std::map<entity, bool> activeEntities;
 };

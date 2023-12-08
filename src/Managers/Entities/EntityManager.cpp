@@ -51,9 +51,9 @@ void EntityManager::clearAllEntities() {
     auto persistanceEntities = ComponentStore::GetInstance().getEntitiesWithComponent<PersistenceTag>();
 
     std::unordered_set<entity> copyEnt(entities);
-    for(auto entity : copyEnt) {
+    for (auto entity: copyEnt) {
         auto found = std::find(persistanceEntities.begin(), persistanceEntities.end(), entity);
-        if(found == persistanceEntities.end()) {
+        if (found == persistanceEntities.end()) {
             ComponentStore::GetInstance().removeAllComponents(entity);
             entities.erase(entity);
         }
@@ -68,11 +68,11 @@ EntityManager &EntityManager::getInstance() {
 void EntityManager::addEntityWithName(entity entityId, const std::string &name) {
     if (name.empty())
         return;
+
     if (nameToEntity.find(name) == nameToEntity.end())
-        nameToEntity[name] = {entityId};
-    else if (std::find(nameToEntity[name].begin(), nameToEntity[name].end(), entityId) ==
-             nameToEntity[name].end())
-        nameToEntity[name].push_back(entityId);
+        Logger::GetInstance().Warning("Entity with name " + name + " already exists, and will be overwritten.");
+
+    nameToEntity[name] = {entityId};
 
     entityToName[entityId] = name;
 }
@@ -92,16 +92,10 @@ void EntityManager::addEntity(entity entity) {
     entities.insert(entity);
 }
 
-
-std::vector<entity> EntityManager::getEntitiesByName(const std::string &name) const {
-    if (nameToEntity.find(name) != nameToEntity.end())
-        return nameToEntity.at(name);
-    return {};
-}
-
 entity EntityManager::getEntityByName(const std::string &name) const {
     if (nameToEntity.find(name) != nameToEntity.end())
-        return nameToEntity.at(name)[0];
+        return nameToEntity.find(name)->second;
+
     return 0;
 }
 
@@ -117,7 +111,7 @@ entity EntityManager::getEntityByTag(const std::string &tag) const {
     return 0;
 }
 
-std::map<std::string, std::vector<entity>> EntityManager::getEntitiesByNameMap() const {
+std::map<std::string, entity> EntityManager::getEntitiesByNameMap() const {
     return nameToEntity;
 }
 
@@ -125,7 +119,7 @@ std::map<std::string, std::vector<entity>> EntityManager::getEntitiesByTagMap() 
     return tagToEntity;
 }
 
-void EntityManager::setEntitiesByNameMap(const std::map<std::string, std::vector<entity>> &entitiesByName) {
+void EntityManager::setEntitiesByNameMap(const std::map<std::string, entity> &entitiesByName) {
     EntityManager::nameToEntity = entitiesByName;
 }
 

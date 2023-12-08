@@ -23,8 +23,8 @@
 #include "Systems/ParticleSystem.hpp"
 
 
-BrackEngine::BrackEngine(Config &&config) {
-    ConfigSingleton::GetInstance().SetConfig(config);
+BrackEngine::BrackEngine(std::unique_ptr<Config> config) {
+    ConfigSingleton::GetInstance().SetConfig(std::move(config));
     SystemManager::getInstance().AddSystem(std::make_shared<InputSystem>());
     SystemManager::getInstance().AddSystem(std::make_shared<ClickSystem>());
     SystemManager::getInstance().AddSystem(std::make_shared<AudioSystem>());

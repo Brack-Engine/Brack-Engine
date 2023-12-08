@@ -15,7 +15,7 @@
 struct CircleCollisionComponent : public IComponent {
 
     explicit CircleCollisionComponent(float xRadius, float yRadius)
-            : IComponent(), radius(new Vector2(xRadius, yRadius)) {}
+            : IComponent(), radius(std::make_unique<Vector2>(xRadius, yRadius)) {}
 
     explicit CircleCollisionComponent(float radius) : CircleCollisionComponent(radius, radius) {}
 

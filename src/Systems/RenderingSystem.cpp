@@ -7,7 +7,7 @@
 #include "../includes/EntityManager.hpp"
 #include "../includes/ComponentStore.hpp"
 
-RenderingSystem::RenderingSystem() : sdl2Wrapper(new RenderWrapper()) {
+RenderingSystem::RenderingSystem() : sdl2Wrapper(std::make_unique<RenderWrapper>()) {
 }
 
 RenderingSystem::~RenderingSystem() {

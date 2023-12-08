@@ -5,7 +5,7 @@
 #include "AudioSystem.hpp"
 #include "../includes/ComponentStore.hpp"
 
-AudioSystem::AudioSystem() : audioWrapper(new AudioWrapper()) {
+AudioSystem::AudioSystem() : audioWrapper(std::make_unique<AudioWrapper>()) {
 }
 
 AudioSystem::~AudioSystem() {
