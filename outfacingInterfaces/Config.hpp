@@ -19,7 +19,7 @@ public:
     std::string windowTitle = "Brack-Engine";
     Vector2 windowSize = Vector2(800, 600);
     bool fullscreen = false;
-    std::string BaseAssetPath = "../../Brackocalypse/Assets/";
+    std::string BaseAssetPath = "./Assets/";
     bool showFPS = true;
     int amountOfSoundEffectsChannels = 5;
     uint16_t fpsLimit = 0;

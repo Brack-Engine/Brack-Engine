@@ -9,13 +9,12 @@
 #include <vector>
 #include <Helpers/Vector2.hpp>
 #include <Helpers/CollisionType.hpp>
-#include "IComponent.hpp"
+#include "Archetypes/CollisionArchetype.hpp"
 
-
-struct CircleCollisionComponent : public IComponent {
+struct CircleCollisionComponent : public CollisionArchetype {
 
     explicit CircleCollisionComponent(float xRadius, float yRadius)
-            : IComponent(), radius(std::make_unique<Vector2>(xRadius, yRadius)) {}
+            : CollisionArchetype(), radius(new Vector2(xRadius, yRadius)) {}
 
     explicit CircleCollisionComponent(float radius) : CircleCollisionComponent(radius, radius) {}
 
@@ -28,16 +27,14 @@ struct CircleCollisionComponent : public IComponent {
             radius = nullptr;
     };
 
-    CircleCollisionComponent(const CircleCollisionComponent &other) : IComponent(other) {
+    CircleCollisionComponent(const CircleCollisionComponent &other) : CollisionArchetype(other) {
         if (other.radius != nullptr)
             radius = std::make_unique<Vector2>(*other.radius);
-        collisionType = other.collisionType;
         collidedWith = other.collidedWith;
 
     }
 
     std::unique_ptr<Vector2> radius;
-    CollisionType collisionType;
     std::vector<uint32_t> collidedWith;
 
 };

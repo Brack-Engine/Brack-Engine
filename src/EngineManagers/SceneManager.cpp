@@ -54,3 +54,35 @@ Vector2 SceneManager::getWorldPosition(const TransformComponent &transformCompon
         return position;
     }
 }
+
+Vector2 SceneManager::getWorldScale(const TransformComponent &transformComponent) {
+    auto scale = *transformComponent.scale;
+
+    try {
+        auto parentId = ComponentStore::GetInstance().tryGetComponent<ParentComponent>(
+                transformComponent.entityID).parentId;
+        auto &parentTransform = ComponentStore::GetInstance().tryGetComponent<TransformComponent>(parentId);
+        scale *= getWorldScale(parentTransform);
+        return scale;
+    }
+    catch (std::runtime_error &e) {
+        return scale;
+    }
+}
+
+float SceneManager::getWorldRotation(const TransformComponent &transformComponent) {
+    auto rotation = transformComponent.rotation;
+
+    try {
+        auto parentId = ComponentStore::GetInstance().tryGetComponent<ParentComponent>(
+                transformComponent.entityID).parentId;
+        auto &parentTransform = ComponentStore::GetInstance().tryGetComponent<TransformComponent>(parentId);
+        rotation += getWorldRotation(parentTransform);
+        return rotation;
+    }
+    catch (std::runtime_error &e) {
+        return rotation;
+    }
+}
+
+

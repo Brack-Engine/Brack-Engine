@@ -95,6 +95,11 @@ std::vector<std::unique_ptr<IComponent>> &&GameObject::getAllComponents() {
     return std::move(components);
 }
 
+std::vector<std::unique_ptr<IBehaviourScript>> &&GameObject::getAllBehaviourScripts() {
+    return std::move(behaviourScripts);
+}
+
+
 void GameObject::addChild(std::unique_ptr<GameObject> child) {
     try {
         auto &childComponent = tryGetComponent<ChildComponent>();

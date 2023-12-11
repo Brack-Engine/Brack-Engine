@@ -6,28 +6,28 @@
 #define BRACK_ENGINE_RIGIDBODYCOMPONENT_HPP
 
 #include "IComponent.hpp"
-#include "../../src/Components/ComponentVisitor.hpp"
+#include <Helpers/CollisionType.hpp>
 
 struct RigidBodyComponent : public IComponent {
-    explicit RigidBodyComponent() : IComponent() {}
+    explicit RigidBodyComponent(CollisionType type) : IComponent(), collisionType(type) {}
+
+    explicit RigidBodyComponent() : IComponent(), collisionType(CollisionType::STATIC) {}
 
     ~RigidBodyComponent() override = default;
 
-     virtual std::unique_ptr<IComponent> clone() const {
-         return std::make_unique<RigidBodyComponent>(*this);
-     }
-
-     RigidBodyComponent(const RigidBodyComponent& other) : IComponent(other) {
-         mass = other.mass;
-         gravityScale = other.gravityScale;
-     }
-
-    void accept(ComponentVisitor &visitor) override {
-        visitor.visit(*this);
+    virtual std::unique_ptr<IComponent> clone() const {
+        return std::make_unique<RigidBodyComponent>(*this);
     }
 
-    float mass, gravityScale;
+    RigidBodyComponent(const RigidBodyComponent &other) : IComponent(other) {
+        mass = other.mass;
+        gravityScale = other.gravityScale;
+        collisionType = other.collisionType;
+    }
 
+
+    float mass, gravityScale;
+    CollisionType collisionType;
 };
 
 #endif //BRACK_ENGINE_RIGIDBODYCOMPONENT_HPP

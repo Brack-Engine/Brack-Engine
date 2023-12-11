@@ -9,6 +9,7 @@
 #include <Components/CircleCollisionComponent.hpp>
 #include <Components/BoxCollisionComponent.hpp>
 #include <Components/TransformComponent.hpp>
+#include <Components/SpriteComponent.hpp>
 
 PhysicsWrapper PhysicsWrapper::instance;
 
@@ -52,14 +53,16 @@ void PhysicsWrapper::addCircles(std::vector<uint32_t> componentIds) {
             auto &circleCollisionComp = ComponentStore::GetInstance().tryGetComponent<CircleCollisionComponent>(
                     componentId);
             auto &transformComp = ComponentStore::GetInstance().tryGetComponent<TransformComponent>(componentId);
+            auto &rigidBodyComp = ComponentStore::GetInstance().tryGetComponent<RigidBodyComponent>(componentId);
             b2BodyDef componentBodyDef;
             componentBodyDef.position.Set(transformComp.position->getX(), transformComp.position->getY());
-            componentBodyDef.type = getBodyType(circleCollisionComp.collisionType);
+
+            componentBodyDef.type = getBodyType(rigidBodyComp.collisionType);
 
             b2Body *body = world->CreateBody(&componentBodyDef);
 
             b2CircleShape shape;
-            shape.m_radius = circleCollisionComp.radius->getX() / 2;
+            shape.m_radius = circleCollisionComp.radius->getX() * transformComp.scale->getX();
             b2FixtureDef fixtureDef;
             fixtureDef.isSensor = true;
             fixtureDef.shape = &shape;
@@ -91,14 +94,16 @@ void PhysicsWrapper::addBoxes(std::vector<uint32_t> componentIds) {
             auto &boxCollisionComponent = ComponentStore::GetInstance().tryGetComponent<BoxCollisionComponent>(
                     componentId);
             auto &transformComp = ComponentStore::GetInstance().tryGetComponent<TransformComponent>(componentId);
+            auto &rigidBodyComp = ComponentStore::GetInstance().tryGetComponent<RigidBodyComponent>(componentId);
             b2BodyDef componentBodyDef;
             componentBodyDef.position.Set(transformComp.position->getX(), transformComp.position->getY());
-            componentBodyDef.type = getBodyType(boxCollisionComponent.collisionType);
+            componentBodyDef.type = getBodyType(rigidBodyComp.collisionType);
 
             b2Body *body = world->CreateBody(&componentBodyDef);
 
             b2PolygonShape shape;
-            shape.SetAsBox(boxCollisionComponent.size->getX() / 2, boxCollisionComponent.size->getY() / 2);
+            shape.SetAsBox(boxCollisionComponent.size->getX() * transformComp.scale->getX() / 2,
+                           boxCollisionComponent.size->getY() * transformComp.scale->getY() / 2);
 
             b2FixtureDef fixtureDef;
             fixtureDef.isSensor = true;
@@ -137,8 +142,7 @@ b2BodyType PhysicsWrapper::getBodyType(CollisionType collisionType) {
 
 void PhysicsWrapper::cleanCache() {
     auto worldBodies = world->GetBodyList();
-    for(int i = 0; i < world->GetBodyCount(); i++)
-    {
+    for (int i = 0; i < world->GetBodyCount(); i++) {
         world->DestroyBody(worldBodies);
         ++worldBodies;
     }

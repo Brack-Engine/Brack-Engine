@@ -4,7 +4,7 @@
 
 #include <Components/ChildComponent.hpp>
 #include <Components/ParentComponent.hpp>
-#include <Components/BehaviourScript.hpp>
+#include <BehaviourScripts/BehaviourScript.hpp>
 #include "GameObjectConverter.hpp"
 #include "includes/EntityManager.hpp"
 
@@ -47,6 +47,9 @@ void GameObjectConverter::addGameObject(std::unique_ptr<GameObject> &gameObject)
     for (auto &child: children) {
         child->setEntityId(EntityManager::getInstance().createEntity());
         addGameObject(child);
+    }
+    for (auto &behaviourScript: gameObject->getAllBehaviourScripts()) {
+        BehaviourScriptStore::getInstance().addBehaviourScript(entityId, std::move(behaviourScript));
     }
 
 }

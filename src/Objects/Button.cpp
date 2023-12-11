@@ -7,6 +7,7 @@
 #include <Components/ClickableComponent.hpp>
 #include <Components/BoxCollisionComponent.hpp>
 #include <utility>
+#include <Components/RigidBodyComponent.hpp>
 #include "Objects/Button.hpp"
 
 Button::Button(const Vector2 &size, const std::string &text) : GameObject() {
@@ -24,6 +25,7 @@ Button::Button(const Vector2 &size, const std::string &text) : GameObject() {
     auto clickableComponent = std::make_unique<ClickableComponent>();
 
     addComponent(std::move(boxCollisionComponent));
+    addComponent(std::make_unique<RigidBodyComponent>());
     addComponent(std::move(clickableComponent));
     addComponent(std::move(rectangleComponent));
     addComponent(std::move(textComponent));

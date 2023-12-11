@@ -17,6 +17,8 @@
 #include <Components/CircleCollisionComponent.hpp>
 #include <Components/RectangleComponent.hpp>
 #include <unordered_map>
+#include <Components/TransformComponent.hpp>
+#include <Components/TileMapComponent.hpp>
 
 struct SDLWindowDeleter {
     void operator()(SDL_Window *window) const {
@@ -32,6 +34,9 @@ public:
 
     void RenderCamera(const CameraComponent &cameraComponent);
 
+    void RenderTileMap(const CameraComponent &cameraComponent, const TransformComponent &cameraTransformComponent,
+                       const TileMapComponent &tileMapComponent, const TransformComponent &transformComponent);
+
     void RenderSprite(const CameraComponent &cameraComponent, const TransformComponent &cameraTransformComponent,
                       const SpriteComponent &spriteComponent, const TransformComponent &transformComponent);
 
@@ -45,11 +50,10 @@ public:
                             const BoxCollisionComponent &boxCollisionComponent,
                             const TransformComponent &transformComponent);
 
-    void
-    RenderCircleCollision(const CameraComponent &cameraComponent, const TransformComponent &cameraTransformComponent,
-                          const CircleCollisionComponent &circleCollisionComponent,
-                          const TransformComponent &transformComponent);
+    void RenderUiTileMap(const TileMapComponent &tileMapComponent, const TransformComponent &transformComponent);
 
+    void RenderUiBoxCollision(const BoxCollisionComponent &boxCollisionComponent,
+                              const TransformComponent &transformComponent);
 
     void RenderUiSprite(const SpriteComponent &spriteComponent, const TransformComponent &transformComponent);
 
@@ -63,6 +67,7 @@ public:
     void RenderFrame();
 
     static void Cleanup();
+
     void cleanCache();
 
     void ResizeWindow(Vector2 size);

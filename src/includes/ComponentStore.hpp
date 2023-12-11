@@ -57,6 +57,7 @@ public:
 
         T component(std::forward<Args>(args)...);
         component.entityID = entityId;
+
         components[typeid(T)][entityId] = std::make_unique<T>(component);
 
         if (entityToComponent.size() <= entityId) {
@@ -71,7 +72,7 @@ public:
             throw std::runtime_error("Entity ID cannot be 0.");
 
         component->entityID = entityId;
-
+        
         IComponent &componentRef = *component;
 
         components[typeid(componentRef)][entityId] = std::move(component);

@@ -21,15 +21,16 @@ void AnimationSystem::update(milliseconds deltaTime) {
 
     for (auto entityId: animationComponentIds) {
 
-        auto &spriteComponent = ComponentStore::GetInstance().tryGetComponent<SpriteComponent>(entityId);
-        if (spriteComponent.imageSize->getX() == 0 && spriteComponent.imageSize->getY() == 0) {
+        auto &animationComponent = ComponentStore::GetInstance().tryGetComponent<AnimationComponent>(entityId);
+        if (animationComponent.imageSize->getX() == 0 && animationComponent.imageSize->getY() == 0) {
             Logger::GetInstance().Error("Image size is 0,0");
             return;
         }
-        auto &animationComponent = ComponentStore::GetInstance().tryGetComponent<AnimationComponent>(entityId);
         if (animationComponent.isPlaying) {
             animationComponent.elapsedTime += deltaTime;
             float frameDuration = 1000.0f / animationComponent.fps;
+
+            auto &spriteComponent = ComponentStore::GetInstance().tryGetComponent<SpriteComponent>(entityId);
 
             if (animationComponent.elapsedTime >= frameDuration) {
                 animationComponent.elapsedTime -= frameDuration;
@@ -45,7 +46,7 @@ void AnimationSystem::update(milliseconds deltaTime) {
 
                 }
 
-                int spriteAmountX = round(spriteComponent.imageSize->getX() / spriteComponent.spriteSize->getX());
+                int spriteAmountX = round(animationComponent.imageSize->getX() / spriteComponent.spriteSize->getX());
                 int newX = animationComponent.startPosition->getX() + animationComponent.currentFrame;
                 int newY = animationComponent.startPosition->getY();
 

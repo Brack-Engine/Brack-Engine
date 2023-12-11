@@ -7,7 +7,7 @@
 
 #include <memory>
 #include <vector>
-#include <Components/CircleCollisionComponent.hpp>
+#include <Components/RigidBodyComponent.hpp>
 #include "box2d/box2d.h"
 #include <unordered_map>
 

@@ -16,15 +16,20 @@ public:
 
     ~Button() = default;
 
-    void setText(const std::string& string);
-    void setTextColor(const Color& color);
-    void setBorderWidth(int borderWidth);
-    void setBorderColor(const Color& color);
-    void setFill(const Color& color);
-    void setFontPath(const std::string& path);
+    void setText(const std::string &string);
+
+    void setTextColor(const Color &color);
+
+    void setFill(const Color &color);
+
+    void setFontPath(const std::string &path);
+
     void setFontSize(int fontSize);
+
     void setClickEvent(std::function<void()> func);
+
     bool isDisabled() const;
+
     void setDisabled(bool disabled);
 
 };

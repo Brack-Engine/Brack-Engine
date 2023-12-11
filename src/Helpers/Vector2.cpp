@@ -50,19 +50,19 @@ float Vector2::angel() const {
 }
 
 Vector2 Vector2::operator+(const Vector2 &other) const {
-    return Vector2(x + other.x, y + other.y);
+    return {x + other.x, y + other.y};
 }
 
 Vector2 Vector2::operator-(const Vector2 &other) const {
-    return Vector2(x - other.x, y - other.y);
+    return {x - other.x, y - other.y};
 }
 
 Vector2 Vector2::operator*(const float &other) const {
-    return Vector2(x * other, y * other);
+    return {x * other, y * other};
 }
 
 Vector2 Vector2::operator/(const float &other) const {
-    return Vector2(x / other, y / other);
+    return {x / other, y / other};
 }
 
 bool Vector2::operator==(const Vector2 &other) const {
@@ -91,4 +91,22 @@ void Vector2::operator*=(const float &other) {
 void Vector2::operator/=(const float &other) {
     x /= other;
     y /= other;
+}
+
+void Vector2::operator*=(const Vector2 &other) {
+    x *= other.x;
+    y *= other.y;
+}
+
+void Vector2::operator/=(const Vector2 &other) {
+    x /= other.x;
+    y /= other.y;
+}
+
+Vector2 Vector2::operator*(const Vector2 &other) const {
+    return {x * other.x, y * other.y};
+}
+
+Vector2 Vector2::operator/(const Vector2 &other) const {
+    return {y / other.x, y / other.y};
 }

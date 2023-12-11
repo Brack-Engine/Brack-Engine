@@ -37,6 +37,10 @@ public:
 
     Vector2 getWorldPosition(const TransformComponent &transformComponent);
 
+    static Vector2 getWorldScale(const TransformComponent &transformComponent);
+
+    static float getWorldRotation(const TransformComponent &transformComponent);
+
     std::string getActiveSceneSignature();
 
     Scene &getActiveScene();

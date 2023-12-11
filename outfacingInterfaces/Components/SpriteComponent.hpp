@@ -5,8 +5,9 @@
 #ifndef BRACK_ENGINE_SPRITECOMPONENT_HPP
 #define BRACK_ENGINE_SPRITECOMPONENT_HPP
 
-#include "TransformComponent.hpp"
+
 #include "Helpers/Color.hpp"
+#include "Helpers/Vector2.hpp"
 #include <string>
 #include <memory>
 #include <Components/Archetypes/RenderArchetype.hpp>
@@ -15,9 +16,6 @@ struct SpriteComponent : public RenderArchetype {
     explicit SpriteComponent() : RenderArchetype() {}
 
     ~SpriteComponent() override {
-        if (imageSize != nullptr)
-            imageSize = nullptr;
-
         if (spriteSize != nullptr)
             spriteSize = nullptr;
 
@@ -34,8 +32,6 @@ struct SpriteComponent : public RenderArchetype {
 
     SpriteComponent(const SpriteComponent &other) : RenderArchetype(other) {
         spritePath = other.spritePath;
-        if (other.imageSize != nullptr)
-            imageSize = std::make_unique<Vector2>(*other.imageSize);
 
         if (other.spriteSize != nullptr)
             spriteSize = std::make_unique<Vector2>(*other.spriteSize);
@@ -46,13 +42,10 @@ struct SpriteComponent : public RenderArchetype {
         if (other.color != nullptr)
             color = std::make_unique<Color>(*other.color);
 
-        sortingLayer = other.sortingLayer;
-        orderInLayer = other.orderInLayer;
         margin = other.margin;
     }
 
     std::string spritePath = "";
-    std::unique_ptr<Vector2> imageSize = std::make_unique<Vector2>(0, 0);
     std::unique_ptr<Vector2> spriteSize = std::make_unique<Vector2>(0, 0);
     std::unique_ptr<Vector2> tileOffset = std::make_unique<Vector2>(0, 0);
     std::unique_ptr<Color> color = std::make_unique<Color>(0, 0, 0, 255);

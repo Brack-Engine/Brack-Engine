@@ -32,7 +32,6 @@ add_library(${PROJECT_NAME} SHARED
         src/includes/ComponentStore.hpp
         src/Managers/Systems/SystemManager.cpp
         src/includes/SystemManager.hpp
-        outfacingInterfaces/IComponentStorage.hpp
         src/Wrappers/RenderWrapper.cpp
         outfacingInterfaces/Components/ChildComponent.hpp
         outfacingInterfaces/Components/ParentComponent.hpp
@@ -50,7 +49,6 @@ add_library(${PROJECT_NAME} SHARED
         outfacingInterfaces/Components/AnimationComponent.hpp
         outfacingInterfaces/Components/ParticleComponent.hpp
         outfacingInterfaces/Components/ParticleEmitterComponent.hpp
-        outfacingInterfaces/Components/BehaviourScript.hpp
         outfacingInterfaces/Components/InputTag.hpp
         outfacingInterfaces/Components/PersistenceTag.hpp
         src/Systems/RenderingSystem.cpp
@@ -105,6 +103,11 @@ add_library(${PROJECT_NAME} SHARED
         src/Managers/ReplayManager.cpp
         outfacingInterfaces/EngineManagers/ReplayManager.hpp
         outfacingInterfaces/Milliseconds.hpp
+        outfacingInterfaces/Components/Archetypes/CollisionArchetype.hpp
+        outfacingInterfaces/Components/TileMapComponent.hpp
+        src/Managers/Entities/BehaviourScriptStore.cpp
+        outfacingInterfaces/BehaviourScripts/BehaviourScript.cpp
+        outfacingInterfaces/BehaviourScripts/IBehaviourScript.hpp
 )
 
 if (WIN32 OR WIN64)

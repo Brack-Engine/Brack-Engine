@@ -17,6 +17,9 @@ struct AnimationComponent : public IComponent {
     ~AnimationComponent() override {
         if (startPosition != nullptr)
             startPosition = nullptr;
+
+        if (imageSize != nullptr)
+            imageSize = nullptr;
     };
 
     virtual std::unique_ptr<IComponent> clone() const override {
@@ -32,6 +35,8 @@ struct AnimationComponent : public IComponent {
         elapsedTime = other.elapsedTime;
         if (other.startPosition != nullptr)
             startPosition = std::make_unique<Vector2>(*other.startPosition);
+        if (other.imageSize != nullptr)
+            imageSize = std::make_unique<Vector2>(*other.imageSize);
     }
 
     bool isLooping = true, isPlaying = true;
@@ -39,6 +44,7 @@ struct AnimationComponent : public IComponent {
     float elapsedTime = 0.0f;
     int frameCount = 0, currentFrame = 0;
     std::unique_ptr<Vector2> startPosition = std::make_unique<Vector2>(0, 0);
+    std::unique_ptr<Vector2> imageSize = std::make_unique<Vector2>(0, 0);
 };
 
 #endif //BRACK_ENGINE_ANIMATIONCOMPONENT_HPP

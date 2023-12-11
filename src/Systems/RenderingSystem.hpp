@@ -38,6 +38,10 @@ private:
 
     std::multiset<RenderArchetype *, CompareByLayer> components;
     std::multiset<RenderArchetype *, CompareByLayer> uiComponents;
+#if CURRENT_LOG_LEVEL >= LOG_LEVEL_DEBUG
+    std::set<CollisionArchetype *> collisionComponents;
+    std::set<CollisionArchetype *> uiCollisionComponents;
+#endif
     std::unique_ptr<RenderWrapper> sdl2Wrapper;
 };
 

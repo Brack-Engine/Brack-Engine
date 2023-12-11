@@ -5,6 +5,8 @@
 #ifndef BRACK_ENGINE_COLOR_HPP
 #define BRACK_ENGINE_COLOR_HPP
 
+#include <cstdint>
+
 class Color {
 public:
     Color() = default;
