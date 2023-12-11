@@ -35,7 +35,7 @@ public:
 
     std::vector<GameObject *> getGameObjectsByTag(const std::string &tag);
 
-    Vector2 getWorldPosition(const TransformComponent &transformComponent);
+    static Vector2 getWorldPosition(const TransformComponent &transformComponent);
 
     static Vector2 getWorldScale(const TransformComponent &transformComponent);
 

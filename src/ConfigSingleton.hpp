@@ -9,6 +9,7 @@
 #include <string>
 #include <Helpers/Vector2.hpp>
 #include <Config.hpp>
+#include <memory>
 
 class ConfigSingleton {
 public:

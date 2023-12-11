@@ -10,11 +10,6 @@ std::optional<GameObject *> BehaviourScript::getGameObjectByName(const std::stri
     return GameObjectConverter::getGameObjectByName(name);
 }
 
-std::vector<GameObject> BehaviourScript::getGameObjectsByName(const std::string &name) {
-    return GameObjectConverter::getGameObjectsByName(name);
-}
-
-
 std::vector<GameObject *> BehaviourScript::getGameObjectsByTag(const std::string &tag) {
     return GameObjectConverter::getGameObjectsByTag(tag);
 }
