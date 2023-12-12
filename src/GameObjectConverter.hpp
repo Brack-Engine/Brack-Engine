@@ -16,11 +16,11 @@ public:
 
     static void addGameObject(std::unique_ptr<GameObject> &gameObject);
 
-    static std::optional<GameObject*> getGameObjectByName(const std::string &name);
-    
+    static std::optional<GameObject> getGameObjectByName(const std::string &name);
+
     static std::optional<GameObject> getGameObjectByTag(const std::string &tag);
 
-    static std::vector<GameObject*> getGameObjectsByTag(const std::string &tag);
+    static std::vector<GameObject> getGameObjectsByTag(const std::string &tag);
 
     static std::vector<GameObject> getChildren(entity entityID);
 
