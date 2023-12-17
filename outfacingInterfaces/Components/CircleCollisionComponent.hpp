@@ -13,28 +13,23 @@
 
 struct CircleCollisionComponent : public CollisionArchetype {
 
-    explicit CircleCollisionComponent(float xRadius, float yRadius)
-            : CollisionArchetype(), radius(new Vector2(xRadius, yRadius)) {}
-
-    explicit CircleCollisionComponent(float radius) : CircleCollisionComponent(radius, radius) {}
-
+    explicit CircleCollisionComponent(float radius)
+            : CollisionArchetype(), radius(radius) {}
+            
     virtual std::unique_ptr<IComponent> clone() const override {
         return std::make_unique<CircleCollisionComponent>(*this);
     }
 
     ~CircleCollisionComponent() override {
-        if (radius != nullptr)
-            radius = nullptr;
     };
 
     CircleCollisionComponent(const CircleCollisionComponent &other) : CollisionArchetype(other) {
-        if (other.radius != nullptr)
-            radius = std::make_unique<Vector2>(*other.radius);
+        radius = other.radius;
         collidedWith = other.collidedWith;
 
     }
 
-    std::unique_ptr<Vector2> radius;
+    float radius;
     std::vector<uint32_t> collidedWith;
 
 };

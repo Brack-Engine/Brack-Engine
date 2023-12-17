@@ -51,6 +51,11 @@ public:
                             const BoxCollisionComponent &boxCollisionComponent,
                             const TransformComponent &transformComponent);
 
+    void
+    RenderCircleCollision(const CameraComponent &cameraComponent, const TransformComponent &cameraTransformComponent,
+                          const CircleCollisionComponent &circleCollisionComponent,
+                          const TransformComponent &transformComponent);
+
     void RenderUiTileMap(const TileMapComponent &tileMapComponent, const TransformComponent &transformComponent);
 
     void RenderUiBoxCollision(const BoxCollisionComponent &boxCollisionComponent,

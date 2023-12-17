@@ -63,7 +63,7 @@ void PhysicsWrapper::addCircles(const std::vector<CircleCollisionComponent *> &c
             bodyPtr.first->SetGravityScale(rigidBodyComp.gravityScale);
 
             b2CircleShape shape;
-            shape.m_radius = circle->radius->getX() * transformComp.scale->getX();
+            shape.m_radius = circle->radius * transformComp.scale->getX();
 
             b2FixtureDef fixtureDef;
             fixtureDef.isSensor = circle->isTrigger;

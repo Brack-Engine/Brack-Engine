@@ -49,12 +49,17 @@ void RenderingSystem::update(milliseconds deltaTime) {
             if (auto *boxCollisionComponent = dynamic_cast<const BoxCollisionComponent *>(component))
                 sdl2Wrapper->RenderBoxCollision(cameraComponent, cameraTransformComponent, *boxCollisionComponent,
                                                 transformComponent);
+            else if (auto *circleCollisionComponent = dynamic_cast<const CircleCollisionComponent *>(component))
+                sdl2Wrapper->RenderCircleCollision(cameraComponent, cameraTransformComponent,
+                                                   *circleCollisionComponent, transformComponent);
         }
         auto graphComponentIds = ComponentStore::GetInstance().getEntitiesWithComponent<GraphComponent>();
         for (auto graphComponentId: graphComponentIds) {
-            auto& graphComponent = ComponentStore::GetInstance().tryGetComponent<GraphComponent>(graphComponentId);
-            auto& graphTransformComponent = ComponentStore::GetInstance().tryGetComponent<TransformComponent>(graphComponentId);
-            sdl2Wrapper->RenderGraph(cameraComponent,cameraTransformComponent, graphComponent, graphTransformComponent);
+            auto &graphComponent = ComponentStore::GetInstance().tryGetComponent<GraphComponent>(graphComponentId);
+            auto &graphTransformComponent = ComponentStore::GetInstance().tryGetComponent<TransformComponent>(
+                    graphComponentId);
+            sdl2Wrapper->RenderGraph(cameraComponent, cameraTransformComponent, graphComponent,
+                                     graphTransformComponent);
         }
 #endif
     }
@@ -80,6 +85,7 @@ void RenderingSystem::update(milliseconds deltaTime) {
                 component->entityId);
         if (auto *boxCollisionComponent = dynamic_cast<const BoxCollisionComponent *>(component))
             sdl2Wrapper->RenderUiBoxCollision(*boxCollisionComponent, transformComponent);
+        
     }
 #endif
 

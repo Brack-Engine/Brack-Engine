@@ -478,7 +478,7 @@ void RenderWrapper::RenderGraph(const CameraComponent &cameraComponent,
                                 const GraphComponent &graphComponent,
                                 const TransformComponent &graphTransformComponent) {
 #if CURRENT_LOG_LEVEL >= LOG_LEVEL_DEBUG
-    for (auto& graphNode: graphComponent.graph_) {
+    for (auto &graphNode: graphComponent.graph_) {
         auto &cameraPosition = cameraTransformComponent.position;
         auto &cameraSize = cameraComponent.size;
         auto boxPosition = graphNode->getPosition() + *graphTransformComponent.position;
@@ -498,9 +498,9 @@ void RenderWrapper::RenderGraph(const CameraComponent &cameraComponent,
                                  cameraComponent.size->getY() / 2 - sizeY / 2),
                 static_cast<int>(sizeX),
                 static_cast<int>(sizeY)};
-        if(graphNode->isVisited()){
+        if (graphNode->isVisited()) {
             SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255);
-        }else{
+        } else {
             SDL_SetRenderDrawColor(renderer.get(), 0, 255, 0, 255);
         }
         SDL_RenderDrawRect(renderer.get(), &squareRect);
@@ -643,6 +643,41 @@ RenderWrapper::GetCameraTexturePair(const CameraComponent &cameraComponent) {
     }
     cameraTexture = cameraTextures.find(cameraComponent.entityId);
     return cameraTexture->second;
+}
+
+void RenderWrapper::RenderCircleCollision(const CameraComponent &cameraComponent,
+                                          const TransformComponent &cameraTransformComponent,
+                                          const CircleCollisionComponent &circleCollisionComponent,
+                                          const TransformComponent &transformComponent) {
+
+    auto &cameraPosition = cameraTransformComponent.position;
+    auto &cameraSize = cameraComponent.size;
+    auto circlePosition = SceneManager::getWorldPosition(transformComponent) + *circleCollisionComponent.offset;
+    auto circleScale = SceneManager::getWorldScale(transformComponent);
+    auto circleRadius = circleCollisionComponent.radius * circleScale.getX();
+
+    if (circlePosition.getX() + circleRadius < cameraPosition->getX() - cameraSize->getX() / 2 ||
+        circlePosition.getX() - circleRadius > cameraPosition->getX() + cameraSize->getX() / 2 ||
+        circlePosition.getY() + circleRadius < cameraPosition->getY() - cameraSize->getY() / 2 ||
+        circlePosition.getY() - circleRadius > cameraPosition->getY() + cameraSize->getY() / 2)
+        return;
+
+    if (textures.find("Sprites/Circle.png") == textures.end())
+        textures.insert(std::make_pair("Sprites/Circle.png", GetSpriteTexture("Sprites/Circle.png")));
+    auto texture = textures.find("Sprites/Circle.png");
+    SDL_Rect srcRect = {0, 0, 512, 512};
+    auto circleWidth = circleRadius * 2;
+    auto circleHeight = circleRadius * 2;
+
+    SDL_Rect destRect = {
+            static_cast<int>(circlePosition.getX() - cameraTransformComponent.position->getX() +
+                             cameraComponent.size->getX() / 2 - circleRadius),
+            static_cast<int>(circlePosition.getY() - cameraTransformComponent.position->getY() +
+                             cameraComponent.size->getY() / 2 - circleRadius),
+            static_cast<int>(circleWidth),
+            static_cast<int>(circleHeight)};
+
+    render(texture->second.get(), &srcRect, &destRect, 0, false, false);
 }
 
 #pragma endregion

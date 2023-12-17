@@ -49,27 +49,27 @@ void ClickSystem::CheckBoxCollision(const ClickableComponent &clickableComponent
 }
 
 void ClickSystem::CheckCircleCollision(const ClickableComponent &clickableComponent, const Vector2 &mousePosition) {
-    try {
-        auto circleCollisionComponent = ComponentStore::GetInstance().tryGetComponent<CircleCollisionComponent>(
-                clickableComponent.entityId);
-        auto transformComponent = ComponentStore::GetInstance().tryGetComponent<TransformComponent>(
-                clickableComponent.entityId);
-        auto x = mousePosition.getX();
-        auto y = mousePosition.getY();
-        auto a = circleCollisionComponent.radius->getX();
-        auto b = circleCollisionComponent.radius->getY();
-        auto h = transformComponent.position->getX() + circleCollisionComponent.radius->getX();
-        auto k = transformComponent.position->getY() + circleCollisionComponent.radius->getY();
-        // Calculate the left-hand side of the ellipse equation
-        double lhs = ((x - h) * (x - h)) / (a * a) + ((y - k) * (y - k)) / (b * b);
-
-        // Check if the point is inside the ellipse
-        if (lhs <= 1.0) {
-            clickableComponent.OnClick();
-        }
-    } catch (const std::exception &e) {
-
-    }
+//    try {
+//        auto circleCollisionComponent = ComponentStore::GetInstance().tryGetComponent<CircleCollisionComponent>(
+//                clickableComponent.entityId);
+//        auto transformComponent = ComponentStore::GetInstance().tryGetComponent<TransformComponent>(
+//                clickableComponent.entityId);
+//        auto x = mousePosition.getX();
+//        auto y = mousePosition.getY();
+//        auto a = circleCollisionComponent.radius->getX();
+//        auto b = circleCollisionComponent.radius->getY();
+//        auto h = transformComponent.position->getX() + circleCollisionComponent.radius->getX();
+//        auto k = transformComponent.position->getY() + circleCollisionComponent.radius->getY();
+//        // Calculate the left-hand side of the ellipse equation
+//        double lhs = ((x - h) * (x - h)) / (a * a) + ((y - k) * (y - k)) / (b * b);
+//
+//        // Check if the point is inside the ellipse
+//        if (lhs <= 1.0) {
+//            clickableComponent.OnClick();
+//        }
+//    } catch (const std::exception &e) {
+//
+//    }
 }
 
 const std::string ClickSystem::getName() const {
