@@ -33,10 +33,9 @@ const std::string PhysicsSystem::getName() const {
 void PhysicsSystem::handleCircles() {
     auto &compStore = ComponentStore::GetInstance();
 
-    auto circleCollisionComponentIds = compStore.getEntitiesWithComponent<CircleCollisionComponent>();
-
-    if (circleCollisionComponentIds.empty()) return;
-    PhysicsWrapper::getInstance().addCircles(circleCollisionComponentIds);
+    auto circleCollisionComponents = compStore.getAllComponentsOfType<CircleCollisionComponent>();
+    if (circleCollisionComponents.empty()) return;
+    PhysicsWrapper::getInstance().addCircles(circleCollisionComponents);
 }
 
 void PhysicsSystem::handleBoxes() {

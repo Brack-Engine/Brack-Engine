@@ -13,6 +13,7 @@
 #include <Milliseconds.hpp>
 #include <Helpers/Vector2.hpp>
 #include <Components/BoxCollisionComponent.hpp>
+#include <Components/CircleCollisionComponent.hpp>
 
 class ContactListener;
 
@@ -38,7 +39,7 @@ public:
 
     void updateVelocities();
 
-    void addCircles(std::vector<entity> componentIds);
+    void addCircles(const std::vector<CircleCollisionComponent *> &circleCollisionComponents);
 
     void addBoxes(const std::vector<BoxCollisionComponent *> &boxCollisionComponents);
 
