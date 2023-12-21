@@ -442,11 +442,12 @@ RenderWrapper::RenderUiSprite(const SpriteComponent &spriteComponent, const Tran
     auto spritePosition = SceneManager::getWorldPosition(transformComponent);
     auto spriteScale = SceneManager::getWorldScale(transformComponent);
     auto spriteRotation = SceneManager::getWorldRotation(transformComponent);
-
+    auto sizeX = spriteComponent.spriteSize->getX() * spriteScale.getX();
+    auto sizeY = spriteComponent.spriteSize->getY() * spriteScale.getY();
     //Fill in a rectangle for the current sprite IN
     SDL_Rect srcRect;
-    int spriteWidth = spriteComponent.spriteSize->getX() * spriteScale.getX();
-    int spriteHeight = spriteComponent.spriteSize->getY() * spriteScale.getY();
+    int spriteWidth = spriteComponent.spriteSize->getX();
+    int spriteHeight = spriteComponent.spriteSize->getY();
     srcRect.x = (spriteComponent.tileOffset->getX() * spriteWidth) +
                 (spriteComponent.margin * spriteComponent.tileOffset->getX());
     srcRect.y = (spriteComponent.tileOffset->getY() * spriteHeight) +
@@ -457,8 +458,7 @@ RenderWrapper::RenderUiSprite(const SpriteComponent &spriteComponent, const Tran
     //Create a rectangle were the sprite needs to be rendered on to
     SDL_Rect destRect = {
             static_cast<int>(spritePosition.getX()), static_cast<int>(spritePosition.getY()),
-            static_cast<int>(spriteWidth * spriteScale.getX()),
-            static_cast<int>(spriteHeight * spriteScale.getY())
+            static_cast<int>(sizeX), static_cast<int>(sizeY)
     };
 
     render(texture->second.get(), &srcRect, &destRect, spriteRotation, spriteComponent.flipX, spriteComponent.flipY);
